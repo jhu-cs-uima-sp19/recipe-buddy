@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">recipebuddy</string>
+    <string name="app_name">Recipe Buddy</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Section</string>
 </resources>
