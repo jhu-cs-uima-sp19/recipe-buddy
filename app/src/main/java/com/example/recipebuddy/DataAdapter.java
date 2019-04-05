@@ -43,7 +43,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                                                      int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.text_view_ingredient, parent, false);
+                .inflate(R.layout.view_ingredient, parent, false);
 
 
 
