@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        //DBHandler myDbHelper = new DBHandler(this);
+        //myDbHelper.openDataBase();
 
     }
 

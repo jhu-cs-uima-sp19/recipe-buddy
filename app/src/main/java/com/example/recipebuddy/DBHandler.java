@@ -21,7 +21,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_PRODUCTNAME = "name";
 
-    private static String DB_PATH = "D:/github/recipe-buddy/app/src/main/assets";
+    //need to fix path
+    private static String DB_PATH = "/app/src/main/assets/";
 
     private static String DB_NAME = "recipes";
 
