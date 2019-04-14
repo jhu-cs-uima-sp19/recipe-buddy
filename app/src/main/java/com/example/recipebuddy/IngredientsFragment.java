@@ -2,6 +2,7 @@ package com.example.recipebuddy;
 
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -72,6 +73,6 @@ public class IngredientsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
+        fab.setImageBitmap(HelperMethods.textAsBitmap("Let's Cook!", 40, Color.WHITE));
     }
 }

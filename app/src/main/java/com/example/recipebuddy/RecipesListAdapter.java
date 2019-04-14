@@ -38,14 +38,6 @@ public class RecipesListAdapter extends RecyclerView.Adapter<RecipesListAdapter.
             @Override
             public void onClick(View v) {
                 listener.onItemClick(v, mViewHolder.getPosition());
-                if (selectedItems.get(mViewHolder.getAdapterPosition(), false)) {
-                    selectedItems.delete(mViewHolder.getAdapterPosition());
-                    v.findViewById(R.id.view_foreground).setSelected(false);
-                }
-                else {
-                    selectedItems.put(mViewHolder.getAdapterPosition(), true);
-                    v.findViewById(R.id.view_foreground).setSelected(true);
-                }
             }
         });
         return mViewHolder;
