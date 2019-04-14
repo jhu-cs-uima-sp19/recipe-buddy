@@ -28,6 +28,7 @@ public class IngredientsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        //TODO USE PERSONAL INGREDIENTS DATABASE (mykitchen) INSTEAD OF DATA ARRAY
         String[] data = {"Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewIngredients);
