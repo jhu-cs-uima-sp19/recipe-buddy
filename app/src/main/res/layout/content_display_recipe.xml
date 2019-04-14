@@ -5,13 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".RecipesActivity"
-    tools:showIn="@layout/activity_recipes">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewRecipes"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    tools:context=".DisplayRecipeActivity"
+    tools:showIn="@layout/activity_display_recipe">
 
 </android.support.constraint.ConstraintLayout>

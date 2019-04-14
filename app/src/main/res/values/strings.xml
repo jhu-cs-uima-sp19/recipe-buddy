@@ -3,5 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Section</string>
     <string name="title_activity_add_ingredients">Add Ingredients</string>
-    <string name="title_activity_recipes">RecipesActivity</string>
+    <string name="title_activity_recipes">Recipes</string>
+    <string name="title_activity_display_recipe">DisplayRecipeActivity</string>
 </resources>
