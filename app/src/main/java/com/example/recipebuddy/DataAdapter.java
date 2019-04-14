@@ -24,8 +24,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         public MyViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.name);
-//            description = v.findViewById(R.id.description);
-//            price = v.findViewById(R.id.price);
             thumbnail = v.findViewById(R.id.thumbnail);
             viewBackground = v.findViewById(R.id.view_background);
             viewForeground = v.findViewById(R.id.view_foreground);

@@ -35,7 +35,7 @@
         android:id="@+id/view_foreground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_border"
+        android:background="@drawable/background_selector"
         android:padding="@dimen/padd_10">
 
         <ImageView
@@ -49,33 +49,32 @@
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/thumbnail"
             android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/thumbnail"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
             android:textColor="@color/item_name"
-            android:textSize="17dp"
-            />
+            android:textSize="17dp" />
 
         <!--<TextView-->
-            <!--android:id="@+id/description"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@id/name"-->
-            <!--android:layout_marginTop="5dp"-->
-            <!--android:layout_toRightOf="@id/thumbnail"-->
-            <!--android:textColor="@color/description"-->
-            <!--android:textSize="12dp" />-->
+        <!--android:id="@+id/description"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/name"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_toRightOf="@id/thumbnail"-->
+        <!--android:textColor="@color/description"-->
+        <!--android:textSize="12dp" />-->
 
         <!--<TextView-->
-            <!--android:id="@+id/price"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_toRightOf="@id/thumbnail"-->
-            <!--android:textColor="@color/colorAccent"-->
-            <!--android:textStyle="bold" />-->
+        <!--android:id="@+id/price"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_toRightOf="@id/thumbnail"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--android:textStyle="bold" />-->
 
     </RelativeLayout>
 
