@@ -95,13 +95,14 @@ public class AddIngredientsActivity extends AppCompatActivity {
                         ingredients.add(data.get(selected.keyAt(i)).getTitle());
                     }
                 }
-                //TODO USE INGREDIENTS TO UPDATE INGREDIENTS DATABASE
-                String out = "";
-                for (int i = 0; i < ingredients.size(); i++) {
-                    out = out + ingredients.get(i) + " ";
-                }
-                Snackbar.make(view, out, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //TODO USE INGREDIENTS TO UPDATE INGREDIENTS DATABASE (ingredients contains all ingredients to be added)
+//                Testing output, can remove this part
+//                String out = "";
+//                for (int i = 0; i < ingredients.size(); i++) {
+//                    out = out + ingredients.get(i) + " ";
+//                }
+//                Snackbar.make(view, out, Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
