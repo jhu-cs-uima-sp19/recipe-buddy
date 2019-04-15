@@ -51,7 +51,37 @@ public class AddIngredientsActivity extends AppCompatActivity {
         //TODO USE ALL POSSIBLE INGREDIENTS DATABASE instead of items array below
         String[] items = {"Chicken", "Beef", "Pork", "Lamb", "Turkey"};
 
-        data = createItemsList(items);
+        DBHandlerIngredient ingredientDBHelper = new DBHandlerIngredient(this);
+        SQLiteDatabase ingredientDB = ingredientDBHelper.getReadableDatabase();
+
+
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                "name"
+        };
+        // Filter results WHERE "title" = 'My Title'
+        ArrayList<String> ingredients = new ArrayList<>();
+
+        Cursor cursor = ingredientDB.query(
+                "ingredients",   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null             // The sort order
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                ingredients.add(cursor.getString(cursor.getColumnIndex("name")));
+            }while(cursor.moveToNext());
+
+        }
+
+        data = createItemsList(ingredients);
         KitchenDBHandler dbHelper = new KitchenDBHandler(this);
         kitchenDB = dbHelper.getWritableDatabase();
 
@@ -126,12 +156,12 @@ public class AddIngredientsActivity extends AppCompatActivity {
         kitchenDB.insert(KitchenColumns.TABLE_NAME, null, cv);
     }
 
-    public ArrayList<ItemsListSingleItem> createItemsList(String[] list) {
+    public ArrayList<ItemsListSingleItem> createItemsList(ArrayList<String> list) {
         ArrayList<ItemsListSingleItem> out = new ArrayList<>();
-        for (int i = 0; i < list.length; i++) {
+        for (int i = 0; i < list.size(); i++) {
             out.add(new ItemsListSingleItem(
                     i + 1,
-                    list[i],
+                    list.get(i),
                     ""
             ));
         }
