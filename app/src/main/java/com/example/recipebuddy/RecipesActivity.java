@@ -1,6 +1,8 @@
 package com.example.recipebuddy;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -37,7 +39,39 @@ public class RecipesActivity extends AppCompatActivity {
 
 
         //TODO USE RECIPES DATABASE instead of items array below
-        String[] items = {"Chicken", "Beef", "Pork", "Lamb", "Turkey"};
+
+
+        DBHandlerRecipe dbHelper = new DBHandlerRecipe(this);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String directions = "";
+
+        String COLUMN_NAME_TITLE = "name";
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                "name"
+        };
+
+        // Filter results WHERE "title" = 'My Title'
+        ArrayList<String> items = new ArrayList<>();
+        Cursor cursor = db.query(
+                "recipes",   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null             // The sort order
+        );
+
+        if (cursor.moveToFirst()) {
+            do{
+                items.add(cursor.getString(cursor.getColumnIndex("name")));
+            }while(cursor.moveToNext());
+
+        }
+
         data = createItemsList(items);
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewRecipes);
@@ -62,12 +96,12 @@ public class RecipesActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    public ArrayList<ItemsListSingleItem> createItemsList(String[] list) {
+    public ArrayList<ItemsListSingleItem> createItemsList(ArrayList<String> list) {
         ArrayList<ItemsListSingleItem> out = new ArrayList<>();
-        for (int i = 0; i < list.length; i++) {
+        for (int i = 0; i < list.size(); i++) {
             out.add(new ItemsListSingleItem(
                     i + 1,
-                    list[i],
+                    list.get(i),
                     ""
             ));
         }
