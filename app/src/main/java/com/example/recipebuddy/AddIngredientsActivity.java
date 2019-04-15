@@ -1,5 +1,6 @@
 package com.example.recipebuddy;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -107,6 +108,9 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 for (int i = 0; i < ingredients.size(); i++) {
                     addIngredient(ingredients.get(i));
                 }
+                finishAffinity();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
 
