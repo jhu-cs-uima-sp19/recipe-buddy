@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.database.Cursor;
+import com.example.recipebuddy.DBConstants.*;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
     private String[] mDataset;
+    private Cursor mCursor;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -31,8 +34,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public DataAdapter(String[] myDataset) {
-        mDataset = myDataset;
+    public DataAdapter(Cursor cursor) {
+        //mDataset = myDataset;
+        mCursor = cursor;
     }
 
     // Create new views (invoked by the layout manager)
@@ -54,13 +58,30 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.name.setText(mDataset[position]);
+        if (!mCursor.moveToPosition(position)) {
+            return;
+        }
+
+        String name = mCursor.getString(mCursor.getColumnIndex(KitchenColumns.COLUMN_NAME));
+        holder.name.setText(name);
 
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mCursor.getCount();
     }
+    public void swapCursor(Cursor newCursor) {
+        if (mCursor != null) {
+            mCursor.close();
+        }
+
+        mCursor = newCursor;
+
+        if (newCursor != null) {
+            notifyDataSetChanged();
+        }
+    }
+
 }

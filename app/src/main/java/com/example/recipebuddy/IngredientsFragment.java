@@ -1,6 +1,7 @@
 package com.example.recipebuddy;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,9 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.example.recipebuddy.DBConstants.*;
 
 public class IngredientsFragment extends Fragment {
+    //String[] data = {"Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
     View view;
+    SQLiteDatabase kitchenDB;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -29,6 +34,9 @@ public class IngredientsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //TODO USE PERSONAL INGREDIENTS DATABASE (mykitchen) INSTEAD OF DATA ARRAY
+        KitchenDBHandler dbHelper = new KitchenDBHandler(getContext());
+        kitchenDB = dbHelper.getWritableDatabase();
+
         String[] data = {"Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewIngredients);
