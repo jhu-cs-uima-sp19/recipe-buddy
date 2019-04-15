@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayoutMain);
         tabLayout.setupWithViewPager(mViewPager);
 
-        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
-        kitchenDB = dbHelper.getWritableDatabase();
 
     }
 
@@ -184,15 +182,4 @@ public class MainActivity extends AppCompatActivity {
 //        mEditTextName.getText().clear();
 //    }
 
-    private Cursor getKitchenIngredients() {
-        return kitchenDB.query(
-                KitchenColumns.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                KitchenColumns.COLUMN_TIMESTAMP + " DESC"
-        );
-    }
 }
