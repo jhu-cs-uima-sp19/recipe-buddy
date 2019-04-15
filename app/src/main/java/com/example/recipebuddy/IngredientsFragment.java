@@ -22,7 +22,6 @@ import com.example.recipebuddy.DBConstants.*;
 
 
 public class IngredientsFragment extends Fragment {
-    //String[] data = {"Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
     View view;
     SQLiteDatabase kitchenDB;
 
@@ -39,7 +38,6 @@ public class IngredientsFragment extends Fragment {
         KitchenDBHandler dbHelper = new KitchenDBHandler(getContext());
         kitchenDB = dbHelper.getReadableDatabase();
 
-        String[] data = {"Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewIngredients);
 

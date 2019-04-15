@@ -42,6 +42,7 @@ public class DisplayRecipeActivity extends AppCompatActivity {
      * The tabs that will display the currently displayed fragment title
      */
     private TabLayout tabLayout;
+    private String name;
 
     private static ImageButton cancel;
 
@@ -59,7 +60,8 @@ public class DisplayRecipeActivity extends AppCompatActivity {
         });
 
         Intent launcher = getIntent();
-        this.setTitle(launcher.getStringExtra("name"));
+        name = launcher.getStringExtra("name");
+        this.setTitle(name);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,8 +69,8 @@ public class DisplayRecipeActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new DisplayRecipeActivity.SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.addFragment(new RecipeIngredientsFragment(), "Ingredients");
-        mSectionsPagerAdapter.addFragment(new RecipeDirectionsFragment(), "Directions");
+        mSectionsPagerAdapter.addFragment(RecipeIngredientsFragment.newInstance(name), "Ingredients");
+        mSectionsPagerAdapter.addFragment(RecipeDirectionsFragment.newInstance(name), "Directions");
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
