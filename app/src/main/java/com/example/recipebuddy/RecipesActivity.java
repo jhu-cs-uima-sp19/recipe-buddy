@@ -35,6 +35,7 @@ public class RecipesActivity extends AppCompatActivity {
             }
         });
 
+
         //TODO USE RECIPES DATABASE instead of items array below
         String[] items = {"Chicken", "Beef", "Pork", "Lamb", "Turkey"};
         data = createItemsList(items);

@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.example.recipebuddy.DBConstants.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        DBHandler myDbHelper;
+        myDbHelper = new DBHandler(this);
+        try {
+            myDbHelper.createDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

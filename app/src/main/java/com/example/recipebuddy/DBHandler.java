@@ -22,9 +22,9 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String COLUMN_PRODUCTNAME = "name";
 
     //need to fix path
-    private static String DB_PATH = "/app/src/main/assets/";
+    private static String DB_PATH = "/data/data/com.example.recipebuddy/databases/";
 
-    private static String DB_NAME = "recipes";
+    private static String DB_NAME = "recipes.db";
 
     private SQLiteDatabase myDataBase;
 
@@ -128,8 +128,8 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         //String query = "CREATE TABLE " + TABLE + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " + COLUMN_PRODUCTNAME + " TEXT " + ");";
-        String query = null;
-        db.execSQL(query);
+//        String query = null;
+//        db.execSQL(query);
     }
 
 
