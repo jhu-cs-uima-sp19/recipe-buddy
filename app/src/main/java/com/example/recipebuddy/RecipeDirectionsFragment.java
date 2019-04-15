@@ -38,7 +38,6 @@ public class RecipeDirectionsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //TODO get directions from recipes database
         DBHandlerRecipe dbHelper = new DBHandlerRecipe(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String directions = "";

@@ -49,6 +49,8 @@ public class IngredientsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+
         // specify an adapter (see also next example)
         DataAdapter mAdapter = new DataAdapter(getKitchenIngredients());
         recyclerView.setAdapter(mAdapter);

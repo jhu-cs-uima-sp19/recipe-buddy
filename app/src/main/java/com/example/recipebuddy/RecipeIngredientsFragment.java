@@ -44,7 +44,6 @@ public class RecipeIngredientsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //TODO get ingredients from recipes database
         DBHandlerRecipe dbHelper = new DBHandlerRecipe(getContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] ingredients = {};

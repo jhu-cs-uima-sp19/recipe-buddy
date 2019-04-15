@@ -37,15 +37,10 @@ public class RecipesActivity extends AppCompatActivity {
             }
         });
 
-
-        //TODO USE RECIPES DATABASE instead of items array below
-
         KitchenDBHandler kitchenDBhelper = new KitchenDBHandler(this);
         SQLiteDatabase kitchenDB = kitchenDBhelper.getReadableDatabase();
         DBHandlerRecipe dbHelper = new DBHandlerRecipe(this);
         SQLiteDatabase recipeDB = dbHelper.getReadableDatabase();
-
-
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
@@ -109,6 +104,8 @@ public class RecipesActivity extends AppCompatActivity {
         // use a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
 
         // specify an adapter (see also next example)
         RecipesListAdapter adapter = new RecipesListAdapter(this, data, new CustomItemClickListener() {

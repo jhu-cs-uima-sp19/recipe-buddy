@@ -95,6 +95,8 @@ public class AddIngredientsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
+
         // specify an adapter (see also next example)
         ItemsListAdapter adapter = new ItemsListAdapter(this, data, new CustomItemClickListener() {
             @Override
@@ -135,8 +137,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
                         ingredients.add(data.get(selected.keyAt(i)).getTitle());
                     }
                 }
-                //TODO USE INGREDIENTS TO UPDATE INGREDIENTS DATABASE (ingredients contains all ingredients to be added
-
                 for (int i = 0; i < ingredients.size(); i++) {
                     addIngredient(ingredients.get(i));
                 }
