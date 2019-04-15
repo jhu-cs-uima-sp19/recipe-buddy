@@ -37,7 +37,7 @@ public class IngredientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //TODO USE PERSONAL INGREDIENTS DATABASE (mykitchen) INSTEAD OF DATA ARRAY
         KitchenDBHandler dbHelper = new KitchenDBHandler(getContext());
-        kitchenDB = dbHelper.getWritableDatabase();
+        kitchenDB = dbHelper.getReadableDatabase();
 
         String[] data = {"Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
         super.onViewCreated(view, savedInstanceState);

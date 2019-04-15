@@ -17,6 +17,10 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.ImageButton;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import com.example.recipebuddy.DBConstants.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,6 +29,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     private static ImageButton cancel;
     private ArrayList<ItemsListSingleItem> data;
     private HashSet<Integer> selected;
+    private SQLiteDatabase kitchenDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,8 @@ public class AddIngredientsActivity extends AppCompatActivity {
         //TODO USE ALL POSSIBLE INGREDIENTS DATABASE instead of items array below
         String[] items = {"Chicken", "Beef", "Pork", "Lamb", "Turkey"};
         data = createItemsList(items);
+        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
+        kitchenDB = dbHelper.getWritableDatabase();
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewIngredients);
 
@@ -96,18 +103,21 @@ public class AddIngredientsActivity extends AppCompatActivity {
                         ingredients.add(data.get(selected.keyAt(i)).getTitle());
                     }
                 }
-                //TODO USE INGREDIENTS TO UPDATE INGREDIENTS DATABASE (ingredients contains all ingredients to be added)
-//                Testing output, can remove this part
-//                String out = "";
-//                for (int i = 0; i < ingredients.size(); i++) {
-//                    out = out + ingredients.get(i) + " ";
-//                }
-//                Snackbar.make(view, out, Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+                //TODO USE INGREDIENTS TO UPDATE INGREDIENTS DATABASE (ingredients contains all ingredients to be added
+                for (int i = 0; i < ingredients.size(); i++) {
+                    addIngredient(ingredients.get(i));
+                }
             }
         });
 
         fab.setImageBitmap(HelperMethods.textAsBitmap("ADD", 40, Color.WHITE));
+    }
+
+    public void addIngredient(String ingredient){
+        ContentValues cv = new ContentValues();
+        cv.put(KitchenColumns.COLUMN_NAME, ingredient);
+
+        kitchenDB.insert(KitchenColumns.TABLE_NAME, null, cv);
     }
 
     public ArrayList<ItemsListSingleItem> createItemsList(String[] list) {
