@@ -1,7 +1,6 @@
 package com.example.recipebuddy;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -22,12 +21,11 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
     ArrayList<ItemsListSingleItem> data;
 
     Context mContext;
-    Cursor mCursor;
     CustomItemClickListener listener;
     SparseBooleanArray selectedItems = new SparseBooleanArray();
 
-    public ItemsListAdapter(Context context, Cursor cursor) {
-        this.mCursor = cursor;
+    public ItemsListAdapter(Context context, ArrayList<ItemsListSingleItem> itemList) {
+        this.data = itemList;
         this.mContext = context;
     }
 
@@ -60,19 +58,7 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
 
     @Override
     public int getItemCount() {
-        return mCursor.getCount();
-    }
-
-    public void swapCursor(Cursor newCursor) {
-        if (mCursor != null) {
-            mCursor.close();
-        }
-
-        mCursor = newCursor;
-
-        if (newCursor != null) {
-            notifyDataSetChanged();
-        }
+        return data.size();
     }
 
     public ItemsListAdapter(Context mContext, ArrayList<ItemsListSingleItem> data, CustomItemClickListener listener) {
