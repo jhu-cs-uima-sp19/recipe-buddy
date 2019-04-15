@@ -1,8 +1,10 @@
 package com.example.recipebuddy;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,21 +17,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class IngredientsFragment extends Fragment {
+public class RecipeIngredientsFragment extends Fragment {
     View view;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_ingredients, container, false);
+        view = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //TODO USE PERSONAL INGREDIENTS DATABASE (mykitchen) INSTEAD OF DATA ARRAY
-        String[] data = {"Ingredient 1", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
+        //TODO get ingredients from recipes database
+        String[] data = {"Ingredient 10", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewIngredients);
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewRecipesIngredients);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -40,7 +42,7 @@ public class IngredientsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        DataAdapter mAdapter = new DataAdapter(data);
+        DataAdapter mAdapter = new DataAdapter(data, "RecipeIngredients");
         recyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -60,18 +62,5 @@ public class IngredientsFragment extends Fragment {
                 // view the background view
             }
         };
-
-        // attaching the touch helper to recycler view
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
-        FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.main_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), RecipesActivity.class);
-                startActivity(intent);
-            }
-        });
-        fab.setImageBitmap(HelperMethods.textAsBitmap("Let's Cook!", 40, Color.WHITE));
     }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
     private String[] mDataset;
+    private String type;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -33,6 +34,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     // Provide a suitable constructor (depends on the kind of dataset)
     public DataAdapter(String[] myDataset) {
         mDataset = myDataset;
+        type = "Ingredients";
+    }
+
+    // Provide a suitable constructor (depends on the kind of dataset)
+    public DataAdapter(String[] myDataset, String type) {
+        mDataset = myDataset;
+        this.type = type;
     }
 
     // Create new views (invoked by the layout manager)
@@ -42,7 +50,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_ingredient, parent, false);
-
+        if (type.compareTo("RecipeIngredients") == 0) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.view_recipe_ingredient, parent, false);
+        }
 
 
         MyViewHolder vh = new MyViewHolder(v);
