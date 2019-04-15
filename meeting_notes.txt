@@ -1,0 +1,78 @@
+﻿4/2 
+Attending:
+-Jason
+-Kevin
+-Jonathan
+-Alex
+
+
+Notes:
+-Met to discuss general implementation and what we needed to create minimum viable product
+
+
+4/4
+Attending:
+-Jason
+-Kevin
+-Jonathan
+-Alex
+
+
+Notes:
+-Discussed more details of implementation
+-Discussed backend needs
+
+
+
+
+4/8
+Attending:
+-Jason
+-Kevin
+-Jonathan
+-Alex
+
+
+Notes:
+-Discussed how we wanted views and icons to look for our app
+-Understand the general flow of app
+
+
+
+
+
+
+4/11
+Attending:
+-Jason
+-Kevin
+-Jonathan
+-Alex
+
+
+-Discussed style changes
+-need to create databases to test on
+-need to learn SQL
+
+
+
+
+
+
+
+
+
+
+
+
+4/13
+Attending:
+-Jason
+-Kevin
+-Jonathan
+-Alex
+
+
+Notes:
+-Discussed implementation problems and some possible solutions
+-Discussed need to develop a better color scheme
