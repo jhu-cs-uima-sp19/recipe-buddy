@@ -17,7 +17,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "db";
-    public static final String TABLE = "stuff";
+    public static final String TABLE = "recipes";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_PRODUCTNAME = "name";
 
@@ -27,7 +27,6 @@ public class DBHandler extends SQLiteOpenHelper {
     private static String DB_NAME = "recipes.db";
 
     private SQLiteDatabase myDataBase;
-
     private final Context myContext;
 
     public DBHandler(Context context) {
@@ -66,7 +65,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         try{
             String myPath = DB_PATH + DB_NAME;
-            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
 
         }catch(SQLiteException e){
 
@@ -127,9 +126,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        //String query = "CREATE TABLE " + TABLE + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT " + COLUMN_PRODUCTNAME + " TEXT " + ");";
-//        String query = null;
-//        db.execSQL(query);
+
     }
 
 
