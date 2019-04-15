@@ -68,7 +68,7 @@ public class DisplayRecipeActivity extends AppCompatActivity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new DisplayRecipeActivity.SectionsPagerAdapter(getSupportFragmentManager());
         mSectionsPagerAdapter.addFragment(new RecipeIngredientsFragment(), "Ingredients");
-        mSectionsPagerAdapter.addFragment(new SavedRecipesFragment(), "Directions");
+        mSectionsPagerAdapter.addFragment(new RecipeDirectionsFragment(), "Directions");
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
