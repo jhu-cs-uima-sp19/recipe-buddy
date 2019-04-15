@@ -13,34 +13,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class DBHandler extends SQLiteOpenHelper {
-
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "db";
-    public static final String TABLE = "recipes";
-    public static final String COLUMN_ID = "id";
-    public static final String COLUMN_PRODUCTNAME = "name";
+public class DBHandlerIngredient extends SQLiteOpenHelper {
 
     //need to fix path
     private static String DB_PATH = "/data/data/com.example.recipebuddy/databases/";
 
-    private static String DB_NAME = "recipes.db";
+    private static String DB_NAME = "ingredients.db";
 
     private SQLiteDatabase myDataBase;
     private final Context myContext;
 
-    public DBHandler(Context context) {
+    public DBHandlerIngredient(Context context) {
 
         super(context, DB_NAME, null, 1);
         this.myContext = context;
     }
-    public void createDataBase() throws IOException{
+
+    public void createDataBase() throws IOException {
 
         boolean dbExist = checkDataBase();
 
-        if(dbExist){
+        if (dbExist) {
             //do nothing - database already exist
-        }else{
+        } else {
 
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
@@ -59,21 +54,21 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    private boolean checkDataBase(){
+    private boolean checkDataBase() {
 
         SQLiteDatabase checkDB = null;
 
-        try{
+        try {
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
 
-        }catch(SQLiteException e){
+        } catch (SQLiteException e) {
 
             //database does't exist yet.
 
         }
 
-        if(checkDB != null){
+        if (checkDB != null) {
 
             checkDB.close();
 
@@ -81,7 +76,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return checkDB != null ? true : false;
     }
-    private void copyDataBase() throws IOException{
+
+    private void copyDataBase() throws IOException {
 
         //Open your local db as the input stream
         InputStream myInput = myContext.getAssets().open(DB_NAME);
@@ -95,7 +91,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //transfer bytes from the inputfile to the outputfile
         byte[] buffer = new byte[1024];
         int length;
-        while ((length = myInput.read(buffer))>0){
+        while ((length = myInput.read(buffer)) > 0) {
             myOutput.write(buffer, 0, length);
         }
 
@@ -117,7 +113,7 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public synchronized void close() {
 
-        if(myDataBase != null)
+        if (myDataBase != null)
             myDataBase.close();
 
         super.close();
@@ -125,13 +121,13 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db){
+    public void onCreate(SQLiteDatabase db) {
 
     }
 
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
 }

@@ -55,10 +55,15 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DBHandler myDbHelper;
-        myDbHelper = new DBHandler(this);
+        DBHandlerRecipe recipeDB;
+        recipeDB = new DBHandlerRecipe(this);
+        DBHandlerIngredient ingredientsDB;
+        ingredientsDB = new DBHandlerIngredient(this);
+
+
         try {
-            myDbHelper.createDataBase();
+            recipeDB.createDataBase();
+            ingredientsDB.createDataBase();
         } catch (IOException e) {
             e.printStackTrace();
         }
