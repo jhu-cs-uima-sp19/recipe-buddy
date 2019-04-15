@@ -9,16 +9,11 @@ import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
 import android.provider.BaseColumns;
+import com.example.recipebuddy.DBConstants.*;
 
 public class KitchenDBHandler extends SQLiteOpenHelper{
-    public static final class GroceryEntry implements BaseColumns {
-        public static final String TABLE_NAME = "groceryList";
-        public static final String COLUMN_NAME = "name";
-        public static final String COLUMN_AMOUNT = "amount";
-        public static final String COLUMN_TIMESTAMP = "timestamp";
-    }
 
-    public static final String DATABASE_NAME = "grocerylist.db";
+    public static final String DATABASE_NAME = "kitchen.db";
     public static final int DATABASE_VERSION = 1;
 
     public KitchenDBHandler(Context context) {
@@ -27,20 +22,20 @@ public class KitchenDBHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String SQL_CREATE_GROCERYLIST_TABLE = "CREATE TABLE " +
-                GroceryEntry.TABLE_NAME + " (" +
-                GroceryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                GroceryEntry.COLUMN_NAME + " TEXT NOT NULL, " +
-                GroceryEntry.COLUMN_AMOUNT + " INTEGER NOT NULL, " +
-                GroceryEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+        final String CURRENT_KITCHEN_TABLE =
+                "CREATE TABLE " +
+                KitchenColumns.TABLE_NAME + " (" +
+                KitchenColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                KitchenColumns.COLUMN_NAME + " TEXT NOT NULL, " +
+                KitchenColumns.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ");";
 
-        db.execSQL(SQL_CREATE_GROCERYLIST_TABLE);
+        db.execSQL(CURRENT_KITCHEN_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + GroceryEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + KitchenColumns.TABLE_NAME);
         onCreate(db);
     }
 }

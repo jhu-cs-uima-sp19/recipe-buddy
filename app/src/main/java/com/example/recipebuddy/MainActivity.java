@@ -2,6 +2,7 @@ package com.example.recipebuddy;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.Script;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -15,6 +16,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import com.example.recipebuddy.DBConstants.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
      * The tabs that will display the currently displayed fragment title
      */
     private TabLayout tabLayout;
+    private SQLiteDatabase kitchenDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayoutMain);
         tabLayout.setupWithViewPager(mViewPager);
 
-        //DBHandler myDbHelper = new DBHandler(this);
-        //myDbHelper.openDataBase();
+        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
+        kitchenDB = dbHelper.getWritableDatabase();
 
     }
 
@@ -159,5 +165,34 @@ public class MainActivity extends AppCompatActivity {
             fragments.add(fragment);
             fragmentTitles.add(title);
         }
+    }
+
+//    private void addItem() {
+//
+//        if (mEditTextName.getText().toString().trim().length() == 0 || mAmount == 0) {
+//            return;
+//        }
+//
+//        String name = mEditTextName.getText().toString();
+//        ContentValues cv = new ContentValues();
+//        cv.put(GroceryContract.GroceryEntry.COLUMN_NAME, name);
+//        cv.put(GroceryContract.GroceryEntry.COLUMN_AMOUNT, mAmount);
+//
+//        mDatabase.insert(GroceryContract.GroceryEntry.TABLE_NAME, null, cv);
+//        mAdapter.swapCursor(getAllItems());
+//
+//        mEditTextName.getText().clear();
+//    }
+
+    private Cursor getKitchenIngredients() {
+        return kitchenDB.query(
+                KitchenColumns.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                KitchenColumns.COLUMN_TIMESTAMP + " DESC"
+        );
     }
 }
