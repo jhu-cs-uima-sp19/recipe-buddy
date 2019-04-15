@@ -26,7 +26,7 @@ public class KitchenDBHandler extends SQLiteOpenHelper{
                 "CREATE TABLE " +
                 KitchenColumns.TABLE_NAME + " (" +
                 KitchenColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                KitchenColumns.COLUMN_NAME + " TEXT NOT NULL, " +
+                KitchenColumns.COLUMN_NAME + " TEXT UNIQUE, " +
                 KitchenColumns.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ");";
 

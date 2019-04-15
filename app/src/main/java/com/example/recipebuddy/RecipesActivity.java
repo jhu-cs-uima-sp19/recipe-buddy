@@ -54,7 +54,7 @@ public class RecipesActivity extends AppCompatActivity {
         };
         String[] projectionRecipe = {
                 "name",
-                "`main ingredient`"
+                "ingredients"
         };
 
         // Filter results WHERE "title" = 'My Title'
@@ -89,7 +89,7 @@ public class RecipesActivity extends AppCompatActivity {
         if (cursor.moveToFirst()) {
             do {
                 for(String item : kitchenItems){
-                    if (cursor.getString(cursor.getColumnIndex("`main ingredient`")).contains(item.toLowerCase())) {
+                    if (cursor.getString(cursor.getColumnIndex("ingredients")).contains(item.toLowerCase())) {
                         items.add(cursor.getString(cursor.getColumnIndex("name")));
                     }
                 }
