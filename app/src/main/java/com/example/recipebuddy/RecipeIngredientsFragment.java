@@ -18,10 +18,23 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class RecipeIngredientsFragment extends Fragment {
     View view;
-    SQLiteDatabase recipeDB;
+
+    public static RecipeIngredientsFragment newInstance(String name) {
+
+        Bundle args = new Bundle();
+
+        RecipeIngredientsFragment fragment = new RecipeIngredientsFragment();
+        args.putString("name", name);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,9 +45,38 @@ public class RecipeIngredientsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //TODO get ingredients from recipes database
-        KitchenDBHandler dbHelper = new KitchenDBHandler(getContext());//change
-        recipeDB = dbHelper.getWritableDatabase();
-        String[] data = {"Ingredient 10", "Ingredient 2", "Ingredient 3", "Ingredient 4", "Ingredient 5", "Ingredient 6", "Ingredient 7", "Ingredient 8"};
+        DBHandlerRecipe dbHelper = new DBHandlerRecipe(getContext());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] ingredients = {};
+
+        String COLUMN_NAME_TITLE = "name";
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                "ingredients"
+        };
+
+        // Filter results WHERE "title" = 'My Title'
+        String selection = COLUMN_NAME_TITLE + " = ?";
+        String[] selectionArgs = { getArguments().getString("name", "Beef and Potatoes") };
+
+        Cursor cursor = db.query(
+                "recipes",   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null             // The sort order
+        );
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String ingredientsStr = cursor.getString(cursor.getColumnIndex("ingredients"));
+            ingredients = ingredientsStr.split(", ");
+        }
+
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewRecipesIngredients);
 
@@ -47,7 +89,7 @@ public class RecipeIngredientsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
-        DataAdapter mAdapter = new DataAdapter(getRecipeIngredients(), "RecipeIngredients");
+        RecipeIngredientsDataAdapter mAdapter = new RecipeIngredientsDataAdapter(ingredients, "RecipeIngredients");
         recyclerView.setAdapter(mAdapter);
 
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -67,16 +109,5 @@ public class RecipeIngredientsFragment extends Fragment {
                 // view the background view
             }
         };
-    }
-    public Cursor getRecipeIngredients() {
-        return recipeDB.query(
-                DBConstants.KitchenColumns.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                DBConstants.KitchenColumns.COLUMN_TIMESTAMP + " DESC"
-        );
     }
 }

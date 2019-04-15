@@ -40,24 +40,38 @@ public class RecipesActivity extends AppCompatActivity {
 
         //TODO USE RECIPES DATABASE instead of items array below
 
-
+        KitchenDBHandler kitchenDBhelper = new KitchenDBHandler(this);
+        SQLiteDatabase kitchenDB = kitchenDBhelper.getReadableDatabase();
         DBHandlerRecipe dbHelper = new DBHandlerRecipe(this);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String directions = "";
+        SQLiteDatabase recipeDB = dbHelper.getReadableDatabase();
 
-        String COLUMN_NAME_TITLE = "name";
+
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
                 "name"
         };
+        String[] projectionRecipe = {
+                "name",
+                "`main ingredient`"
+        };
 
         // Filter results WHERE "title" = 'My Title'
         ArrayList<String> items = new ArrayList<>();
-        Cursor cursor = db.query(
+        ArrayList<String> kitchenItems = new ArrayList<>();
+        Cursor cursor = recipeDB.query(
                 "recipes",   // The table to query
-                projection,             // The array of columns to return (pass null to get all)
+                projectionRecipe,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null             // The sort order
+        );
+        Cursor kitchenCursor = kitchenDB.query(
+                "kitchen",   // The table to query
+                null,             // The array of columns to return (pass null to get all)
                 null,              // The columns for the WHERE clause
                 null,          // The values for the WHERE clause
                 null,                   // don't group the rows
@@ -65,9 +79,21 @@ public class RecipesActivity extends AppCompatActivity {
                 null             // The sort order
         );
 
+        if (kitchenCursor.moveToFirst()) {
+            do {
+                kitchenItems.add(kitchenCursor.getString(kitchenCursor.getColumnIndex("name")));
+            }while(kitchenCursor.moveToNext());
+
+        }
+
         if (cursor.moveToFirst()) {
-            do{
-                items.add(cursor.getString(cursor.getColumnIndex("name")));
+            do {
+                for(String item : kitchenItems){
+                    if (cursor.getString(cursor.getColumnIndex("`main ingredient`")).contains(item.toLowerCase())) {
+                        items.add(cursor.getString(cursor.getColumnIndex("name")));
+                    }
+                }
+
             }while(cursor.moveToNext());
 
         }

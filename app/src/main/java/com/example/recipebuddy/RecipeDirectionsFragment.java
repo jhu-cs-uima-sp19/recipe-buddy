@@ -18,6 +18,17 @@ import android.widget.TextView;
 
 public class RecipeDirectionsFragment extends Fragment {
     View view;
+
+    public static RecipeDirectionsFragment newInstance(String name) {
+        
+        Bundle args = new Bundle();
+        
+        RecipeDirectionsFragment fragment = new RecipeDirectionsFragment();
+        args.putString("name", name);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,7 +53,7 @@ public class RecipeDirectionsFragment extends Fragment {
 
         // Filter results WHERE "title" = 'My Title'
         String selection = COLUMN_NAME_TITLE + " = ?";
-        String[] selectionArgs = { "Beef and Potatoes" };
+        String[] selectionArgs = { getArguments().getString("name", "Beef and Potatoes") };
 
         Cursor cursor = db.query(
                 "recipes",   // The table to query
