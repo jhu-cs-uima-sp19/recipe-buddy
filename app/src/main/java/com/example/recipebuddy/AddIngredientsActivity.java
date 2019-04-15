@@ -50,6 +50,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
         //TODO USE ALL POSSIBLE INGREDIENTS DATABASE instead of items array below
         String[] items = {"Chicken", "Beef", "Pork", "Lamb", "Turkey"};
+
         data = createItemsList(items);
         KitchenDBHandler dbHelper = new KitchenDBHandler(this);
         kitchenDB = dbHelper.getWritableDatabase();
@@ -105,6 +106,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
                     }
                 }
                 //TODO USE INGREDIENTS TO UPDATE INGREDIENTS DATABASE (ingredients contains all ingredients to be added
+
                 for (int i = 0; i < ingredients.size(); i++) {
                     addIngredient(ingredients.get(i));
                 }
