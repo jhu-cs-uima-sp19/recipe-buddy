@@ -43,8 +43,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         public ImageView thumbnail;
         public RelativeLayout viewBackground, viewForeground;
         public ToggleButton toggleButton;
-        CustomItemClickListener listener;
-        SparseBooleanArray selectedItems = new SparseBooleanArray();
 
         public MyViewHolder(View v) {
             super(v);
@@ -112,25 +110,31 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                         v.vibrate(500);
                     }
 
+                    mCursor.moveToPosition(mViewHolder.getAdapterPosition());
+                    String value = mCursor.getString(mCursor.getColumnIndex("name"));
+
                     Intent intent = new Intent(view.getContext(), MainActivity.class);
                     intent.putExtra("mode", 1);
+                    intent.putExtra("value", value);
                     view.getContext().startActivity(intent);
+                    ((Activity) view.getContext()).overridePendingTransition(0,0);
                     return true;
                 }
             });
         } else if (MODE == 1) {
+            v.findViewById(R.id.myToggleButton).setVisibility(View.GONE);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 //                    listener.onItemClick(view, mViewHolder.getPosition());
-                    if (selectedItems.get(mViewHolder.getAdapterPosition(), false)) {
-                        selectedItems.delete(mViewHolder.getAdapterPosition());
-                        view.findViewById(R.id.view_foreground).setSelected(false);
-                    }
-                    else {
-                        selectedItems.put(mViewHolder.getAdapterPosition(), true);
-                        view.findViewById(R.id.view_foreground).setSelected(true);
-                    }
+//                    if (selectedItems.get(mViewHolder.getAdapterPosition(), false)) {
+//                        selectedItems.delete(mViewHolder.getAdapterPosition());
+//                        view.findViewById(R.id.view_foreground).setSelected(false);
+//                    }
+//                    else {
+//                        selectedItems.put(mViewHolder.getAdapterPosition(), true);
+//                        view.findViewById(R.id.view_foreground).setSelected(true);
+//                    }
                     mCursor.moveToPosition(mViewHolder.getAdapterPosition());
 
                     String value = mCursor.getString(mCursor.getColumnIndex("name"));
@@ -163,6 +167,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         return selected;
     }
 
+    public void setSelected(String sel) {
+        selected.put(sel, true);
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
@@ -171,10 +179,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         if (!mCursor.moveToPosition(position)) {
             return;
         }
-
         String name = mCursor.getString(mCursor.getColumnIndex(KitchenColumns.COLUMN_NAME));
         holder.name.setText(name);
-
+        if (selected.get(name) != null && selected.get(name)) {
+            holder.viewForeground.setSelected(true);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

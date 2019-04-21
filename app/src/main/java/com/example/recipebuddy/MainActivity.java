@@ -1,6 +1,7 @@
 package com.example.recipebuddy;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.renderscript.Script;
 import android.support.design.widget.FloatingActionButton;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         MODE = getIntent().getIntExtra("mode", 0);
+        String selected = getIntent().getStringExtra("value");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         // Pass in mode to ingredients fragment
         Bundle bundle = new Bundle();
         bundle.putInt("mode", MODE);
+        bundle.putString("value", selected);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -146,10 +149,10 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("mode", 0);
                 startActivity(intent);
                 finishAffinity();
+                overridePendingTransition(0,0);
                 //TODO remove animation
             }
         }
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -63,8 +63,10 @@ public class IngredientsFragment extends Fragment {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
         MODE = getArguments().getInt("mode", 0);
+        String selected = getArguments().getString("value", "");
         // specify an adapter (see also next example)
         mAdapter = new DataAdapter(getKitchenIngredients(), MODE);
+        mAdapter.setSelected(selected);
         recyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.main_fab);
@@ -76,6 +78,9 @@ public class IngredientsFragment extends Fragment {
             }
         });
         fab.setImageBitmap(HelperMethods.textAsBitmap("Let's Cook!", 40, Color.WHITE));
+        if (MODE == 1) {
+            fab.hide();
+        }
     }
 
     public HashMap<String, Boolean> getSelected() {
