@@ -115,8 +115,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                     Intent intent = new Intent(view.getContext(), MainActivity.class);
                     intent.putExtra("mode", 1);
                     view.getContext().startActivity(intent);
-                    ((Activity) view.getContext()).finish();
-
                     return true;
                 }
             });

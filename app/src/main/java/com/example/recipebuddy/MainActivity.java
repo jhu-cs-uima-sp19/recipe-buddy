@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("mode", 0);
                 startActivity(intent);
-                finish();
+                finishAffinity();
                 //TODO remove animation
             }
         }
