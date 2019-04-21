@@ -9,10 +9,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.example.recipebuddy.DBConstants.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -67,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         recipeDB = new DBHandlerRecipe(this);
         DBHandlerIngredient ingredientsDB;
         ingredientsDB = new DBHandlerIngredient(this);
+
+        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
+        kitchenDB = dbHelper.getWritableDatabase();
 
         try {
             recipeDB.createDataBase();
@@ -124,11 +130,23 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, AddIngredientsActivity.class);
                 startActivity(intent);
             } else if (MODE == 1) {
-                //TODO delete
-                Intent intent = new Intent();
+                SectionsPagerAdapter mSectionsPagerAdapter = ((SectionsPagerAdapter)mViewPager.getAdapter());
+                HashMap<String, Boolean> selected = ((IngredientsFragment)mSectionsPagerAdapter.getItem(0)).getSelected();
+
+                String test = "";
+                for (HashMap.Entry<String, Boolean> i : selected.entrySet()) {
+                    String key = i.getKey();
+                    Boolean value = i.getValue();
+                    test = test + key + ": " + String.valueOf(value) + " ";
+                    if (value) {
+                        kitchenDB.delete(KitchenColumns.TABLE_NAME, "name = ?", new String[] {key});
+                    }
+                }
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("mode", 0);
                 startActivity(intent);
                 finish();
+                //TODO remove animation
             }
         }
 

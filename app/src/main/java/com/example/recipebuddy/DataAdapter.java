@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.VibrationEffect;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -21,12 +22,15 @@ import android.os.Vibrator;
 
 import com.example.recipebuddy.DBConstants.*;
 
+import java.util.HashMap;
+
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
     private String[] mDataset;
     private Cursor mCursor;
     public String type;
     CustomItemClickListener listener;
     SparseBooleanArray selectedItems = new SparseBooleanArray();
+    HashMap<String, Boolean> selected = new HashMap<String, Boolean>();
     int MODE;
 
     // Provide a reference to the views for each data item
@@ -113,15 +117,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                     view.getContext().startActivity(intent);
                     ((Activity) view.getContext()).finish();
 
-                    //                listener.onItemClick(view, mViewHolder.getPosition());
-                    //                if (selectedItems.get(mViewHolder.getAdapterPosition(), false)) {
-                    //                    selectedItems.delete(mViewHolder.getAdapterPosition());
-                    //                    view.findViewById(R.id.view_foreground).setSelected(false);
-                    //                }
-                    //                else {
-                    //                    selectedItems.put(mViewHolder.getAdapterPosition(), true);
-                    //                    view.findViewById(R.id.view_foreground).setSelected(true);
-                    //                }
                     return true;
                 }
             });
@@ -138,10 +133,36 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                         selectedItems.put(mViewHolder.getAdapterPosition(), true);
                         view.findViewById(R.id.view_foreground).setSelected(true);
                     }
+                    mCursor.moveToPosition(mViewHolder.getAdapterPosition());
+
+                    String value = mCursor.getString(mCursor.getColumnIndex("name"));
+                    if (selected.get(value) != null && selected.get(value)) {
+                        selected.put(value, false);
+                        view.findViewById(R.id.view_foreground).setSelected(false);
+                    } else {
+                        selected.put(value, true);
+                        view.findViewById(R.id.view_foreground).setSelected(true);
+                    }
+//                    String test = "";
+//
+//                    for (HashMap.Entry<String, Boolean> i : selected.entrySet()) {
+//                        String key = i.getKey();
+//                        Boolean v = i.getValue();
+//                        if (v) {
+//                            test += key + " ";
+//                        }
+//                    }
+//
+//                    Snackbar snackbar = Snackbar.make(view.getRootView(), test, Snackbar.LENGTH_LONG);
+//                    snackbar.show();
                 }
             });
         }
         return mViewHolder;
+    }
+
+    public HashMap<String, Boolean> getSelected() {
+        return selected;
     }
 
     // Replace the contents of a view (invoked by the layout manager)

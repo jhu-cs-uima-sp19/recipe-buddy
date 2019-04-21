@@ -18,6 +18,7 @@ import android.widget.ToggleButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder> {

@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,15 @@ import android.widget.ToggleButton;
 
 import com.example.recipebuddy.DBConstants.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class IngredientsFragment extends Fragment {
     View view;
+    RecyclerView recyclerView;
     SQLiteDatabase kitchenDB;
+    DataAdapter mAdapter;
     ToggleButton toggleButton;
     int MODE;
 
@@ -44,7 +50,7 @@ public class IngredientsFragment extends Fragment {
         kitchenDB = dbHelper.getReadableDatabase();
 
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewIngredients);
+        recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewIngredients);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -58,7 +64,7 @@ public class IngredientsFragment extends Fragment {
 
         MODE = getArguments().getInt("mode", 0);
         // specify an adapter (see also next example)
-        DataAdapter mAdapter = new DataAdapter(getKitchenIngredients(), MODE);
+        mAdapter = new DataAdapter(getKitchenIngredients(), MODE);
         recyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.main_fab);
@@ -70,6 +76,11 @@ public class IngredientsFragment extends Fragment {
             }
         });
         fab.setImageBitmap(HelperMethods.textAsBitmap("Let's Cook!", 40, Color.WHITE));
+    }
+
+    public HashMap<String, Boolean> getSelected() {
+        HashMap<String, Boolean> selected = mAdapter.getSelected();
+        return selected;
     }
 
     public Cursor getKitchenIngredients() {
