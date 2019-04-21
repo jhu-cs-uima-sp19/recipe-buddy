@@ -48,7 +48,6 @@ public class AddIngredientsActivity extends AppCompatActivity {
             }
         });
 
-        //TODO USE ALL POSSIBLE INGREDIENTS DATABASE instead of items array below
         String[] items = {"Chicken", "Beef", "Pork", "Lamb", "Turkey"};
 
         DBHandlerIngredient ingredientDBHelper = new DBHandlerIngredient(this);

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -17,13 +18,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
+
 import com.example.recipebuddy.DBConstants.*;
 
 
 public class IngredientsFragment extends Fragment {
     View view;
     SQLiteDatabase kitchenDB;
+    ToggleButton toggleButton;
+    int MODE;
 
     @Nullable
     @Override
@@ -34,7 +40,6 @@ public class IngredientsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        //TODO USE PERSONAL INGREDIENTS DATABASE (mykitchen) INSTEAD OF DATA ARRAY
         KitchenDBHandler dbHelper = new KitchenDBHandler(getContext());
         kitchenDB = dbHelper.getReadableDatabase();
 
@@ -51,30 +56,10 @@ public class IngredientsFragment extends Fragment {
 
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
+        MODE = getArguments().getInt("mode", 0);
         // specify an adapter (see also next example)
-        DataAdapter mAdapter = new DataAdapter(getKitchenIngredients());
+        DataAdapter mAdapter = new DataAdapter(getKitchenIngredients(), MODE);
         recyclerView.setAdapter(mAdapter);
-
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // Row is swiped from recycler view
-                // remove it from adapter
-            }
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                // view the background view
-            }
-        };
-
-        // attaching the touch helper to recycler view
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
         FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.main_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +71,7 @@ public class IngredientsFragment extends Fragment {
         });
         fab.setImageBitmap(HelperMethods.textAsBitmap("Let's Cook!", 40, Color.WHITE));
     }
+
     public Cursor getKitchenIngredients() {
         return kitchenDB.query(
                 KitchenColumns.TABLE_NAME,

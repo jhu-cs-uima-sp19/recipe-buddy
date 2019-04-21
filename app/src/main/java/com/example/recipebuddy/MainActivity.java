@@ -47,19 +47,26 @@ public class MainActivity extends AppCompatActivity {
      */
     private TabLayout tabLayout;
     private SQLiteDatabase kitchenDB;
+    Toolbar toolbar;
+    int MODE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MODE = getIntent().getIntExtra("mode", 0);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         DBHandlerRecipe recipeDB;
         recipeDB = new DBHandlerRecipe(this);
         DBHandlerIngredient ingredientsDB;
         ingredientsDB = new DBHandlerIngredient(this);
-
 
         try {
             recipeDB.createDataBase();
@@ -68,10 +75,16 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // Pass in mode to ingredients fragment
+        Bundle bundle = new Bundle();
+        bundle.putInt("mode", MODE);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.addFragment(new IngredientsFragment(), "My Ingredients");
+        IngredientsFragment ingredientsFrag = new IngredientsFragment();
+        ingredientsFrag.setArguments(bundle);
+        mSectionsPagerAdapter.addFragment(ingredientsFrag, "My Ingredients");
         mSectionsPagerAdapter.addFragment(new SavedRecipesFragment(), "Saved Recipes");
 
         // Set up the ViewPager with the sections adapter.
@@ -81,19 +94,21 @@ public class MainActivity extends AppCompatActivity {
         // Set up the TabLayout with the sections adapter.
         tabLayout = (TabLayout) findViewById(R.id.tabLayoutMain);
         tabLayout.setupWithViewPager(mViewPager);
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        // Get current mode for the activity
+        // 0 -> view mode, 1 -> delete mode
+        if (MODE == 0) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        } else if (MODE == 1) {
+            getMenuInflater().inflate(R.menu.menu_main_delete, menu);
+        }
         return true;
     }
 
-    //
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -103,47 +118,22 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, AddIngredientsActivity.class);
-            startActivity(intent);
+            // Get current mode for the activity
+            // 0 -> view mode, 1 -> delete mode
+            if (MODE == 0) {
+                Intent intent = new Intent(this, AddIngredientsActivity.class);
+                startActivity(intent);
+            } else if (MODE == 1) {
+                //TODO delete
+                Intent intent = new Intent();
+                intent.putExtra("mode", 0);
+                startActivity(intent);
+                finish();
+            }
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            return rootView;
-//        }
-//    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -177,22 +167,4 @@ public class MainActivity extends AppCompatActivity {
             fragmentTitles.add(title);
         }
     }
-
-//    private void addItem() {
-//
-//        if (mEditTextName.getText().toString().trim().length() == 0 || mAmount == 0) {
-//            return;
-//        }
-//
-//        String name = mEditTextName.getText().toString();
-//        ContentValues cv = new ContentValues();
-//        cv.put(GroceryContract.GroceryEntry.COLUMN_NAME, name);
-//        cv.put(GroceryContract.GroceryEntry.COLUMN_AMOUNT, mAmount);
-//
-//        mDatabase.insert(GroceryContract.GroceryEntry.TABLE_NAME, null, cv);
-//        mAdapter.swapCursor(getAllItems());
-//
-//        mEditTextName.getText().clear();
-//    }
-
 }
