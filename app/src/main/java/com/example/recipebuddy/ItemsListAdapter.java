@@ -27,7 +27,6 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
 
     Context mContext;
     CustomItemClickListener listener;
-    SparseBooleanArray selectedItems = new SparseBooleanArray();
     HashMap<String, Boolean> selected = new HashMap<String, Boolean>();
 
     public ItemsListAdapter(Context context, ArrayList<ItemsListSingleItem> itemList) {
@@ -51,14 +50,6 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
                     selected.put(value, true);
                     view.findViewById(R.id.view_foreground).setSelected(true);
                 }
-//                if (selectedItems.get(mViewHolder.getAdapterPosition(), false)) {
-//                    selectedItems.delete(mViewHolder.getAdapterPosition());
-//                    v.findViewById(R.id.view_foreground).setSelected(false);
-//                }
-//                else {
-//                    selectedItems.put(mViewHolder.getAdapterPosition(), true);
-//                    v.findViewById(R.id.view_foreground).setSelected(true);
-//                }
             }
         });
         return mViewHolder;
@@ -85,8 +76,8 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
         this.listener = listener;
     }
 
-    public SparseBooleanArray getSelectedItems() {
-        return selectedItems;
+    public HashMap<String, Boolean> getSelectedItems() {
+        return selected;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

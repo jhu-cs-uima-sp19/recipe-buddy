@@ -8,26 +8,6 @@
         android:id="@+id/view_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <!--<ImageView-->
-            <!--android:id="@+id/delete_icon"-->
-            <!--android:layout_width="@dimen/ic_delete"-->
-            <!--android:layout_height="@dimen/ic_delete"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="@dimen/padd_10"-->
-            <!--android:src="@drawable/ic_delete_white_24dp" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="@dimen/padd_10"-->
-            <!--android:layout_toLeftOf="@id/delete_icon"-->
-            <!--android:text="@string/delete"-->
-            <!--android:textColor="#fff"-->
-            <!--android:textSize="13dp" />-->
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -55,37 +35,6 @@
             android:maxLines="1"
             android:textColor="@color/item_name"
             android:textSize="17dp" />
-
-        <!--<ToggleButton-->
-            <!--android:layout_width="30dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:id="@+id/myToggleButton"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:textOn=""-->
-            <!--android:textOff=""-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_margin="24dp"-->
-            <!--android:background="@drawable/ic_baseline_star_border_24px"/>-->
-        <!--<TextView-->
-        <!--android:id="@+id/description"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@id/name"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_toRightOf="@id/thumbnail"-->
-        <!--android:textColor="@color/description"-->
-        <!--android:textSize="12dp" />-->
-
-        <!--<TextView-->
-        <!--android:id="@+id/price"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_toRightOf="@id/thumbnail"-->
-        <!--android:textColor="@color/colorAccent"-->
-        <!--android:textStyle="bold" />-->
-
     </RelativeLayout>
 
 </FrameLayout>

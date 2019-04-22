@@ -24,7 +24,9 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.recipebuddy.DBConstants.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class AddIngredientsActivity extends AppCompatActivity {
     private static ImageButton cancel;
@@ -40,7 +42,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        cancel = (ImageButton) findViewById(R.id.imageButton);
+        cancel = findViewById(R.id.imageButton);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +86,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
         KitchenDBHandler dbHelper = new KitchenDBHandler(this);
         kitchenDB = dbHelper.getWritableDatabase();
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewIngredients);
+        final RecyclerView recyclerView = findViewById(R.id.recyclerViewIngredients);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -107,23 +109,20 @@ public class AddIngredientsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SparseBooleanArray selected = ((ItemsListAdapter)recyclerView.getAdapter()).getSelectedItems();
+                HashMap<String, Boolean> selected = ((ItemsListAdapter)recyclerView.getAdapter()).getSelectedItems();
                 ArrayList<String> ingredients = new ArrayList<>();
-                for (int i = 0; i < selected.size(); i++) {
-                    if (selected.valueAt(i)) {
-                        ingredients.add(data.get(selected.keyAt(i)).getTitle());
+                for (Map.Entry<String, Boolean> entry: selected.entrySet()) {
+                    String key = entry.getKey();
+                    Boolean val = entry.getValue();
+                    if (val) {
+                        addIngredient(key);
                     }
-                }
-                for (int i = 0; i < ingredients.size(); i++) {
-                    addIngredient(ingredients.get(i));
                 }
                 finishAffinity();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
-
-        fab.setImageBitmap(HelperMethods.textAsBitmap("ADD", 40, Color.WHITE));
     }
 
     public void addIngredient(String ingredient){

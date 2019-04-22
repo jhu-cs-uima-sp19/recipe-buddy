@@ -73,11 +73,20 @@ public class IngredientsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final View v = view;
                 Intent intent = new Intent(getContext(), RecipesActivity.class);
                 startActivity(intent);
+
+                // delay clickability to prevent double click
+                v.setClickable(false);
+                v.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        v.setClickable(true);
+                    }
+                }, 500);
             }
         });
-        fab.setImageBitmap(HelperMethods.textAsBitmap("Let's Cook!", 40, Color.WHITE));
         if (MODE == 1) {
             fab.hide();
         }
