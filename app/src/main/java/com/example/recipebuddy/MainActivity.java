@@ -150,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finishAffinity();
                 overridePendingTransition(0,0);
-                //TODO remove animation
             }
         }
         return super.onOptionsItemSelected(item);

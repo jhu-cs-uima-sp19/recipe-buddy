@@ -66,7 +66,7 @@ public class IngredientsFragment extends Fragment {
         String selected = getArguments().getString("value", "");
         // specify an adapter (see also next example)
         mAdapter = new DataAdapter(getKitchenIngredients(), MODE);
-        mAdapter.setSelected(selected);
+        mAdapter.setSelection(selected);
         recyclerView.setAdapter(mAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.main_fab);

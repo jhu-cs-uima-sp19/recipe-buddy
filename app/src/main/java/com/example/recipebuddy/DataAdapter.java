@@ -25,11 +25,8 @@ import com.example.recipebuddy.DBConstants.*;
 import java.util.HashMap;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
-    private String[] mDataset;
     private Cursor mCursor;
     public String type;
-    CustomItemClickListener listener;
-    SparseBooleanArray selectedItems = new SparseBooleanArray();
     HashMap<String, Boolean> selected = new HashMap<String, Boolean>();
     int MODE;
 
@@ -46,7 +43,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
 
         public MyViewHolder(View v) {
             super(v);
-            final View view = v;
+            view = v;
             name = v.findViewById(R.id.name);
             thumbnail = v.findViewById(R.id.thumbnail);
             viewBackground = v.findViewById(R.id.view_background);
@@ -97,17 +94,18 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                     .inflate(R.layout.view_recipe_ingredient, parent, false);
         }
         final MyViewHolder mViewHolder = new  DataAdapter.MyViewHolder(v);
+        mViewHolder.setIsRecyclable(false);
         if (MODE == 0) {
             v.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    Vibrator v = (Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    Vibrator vib = (Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE);
                     // Vibrate for 500 milliseconds
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                        vib.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                     } else {
                         //deprecated in API 26
-                        v.vibrate(500);
+                        vib.vibrate(500);
                     }
 
                     mCursor.moveToPosition(mViewHolder.getAdapterPosition());
@@ -126,15 +124,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    listener.onItemClick(view, mViewHolder.getPosition());
-//                    if (selectedItems.get(mViewHolder.getAdapterPosition(), false)) {
-//                        selectedItems.delete(mViewHolder.getAdapterPosition());
-//                        view.findViewById(R.id.view_foreground).setSelected(false);
-//                    }
-//                    else {
-//                        selectedItems.put(mViewHolder.getAdapterPosition(), true);
-//                        view.findViewById(R.id.view_foreground).setSelected(true);
-//                    }
                     mCursor.moveToPosition(mViewHolder.getAdapterPosition());
 
                     String value = mCursor.getString(mCursor.getColumnIndex("name"));
@@ -145,18 +134,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                         selected.put(value, true);
                         view.findViewById(R.id.view_foreground).setSelected(true);
                     }
-//                    String test = "";
-//
-//                    for (HashMap.Entry<String, Boolean> i : selected.entrySet()) {
-//                        String key = i.getKey();
-//                        Boolean v = i.getValue();
-//                        if (v) {
-//                            test += key + " ";
-//                        }
-//                    }
-//
-//                    Snackbar snackbar = Snackbar.make(view.getRootView(), test, Snackbar.LENGTH_LONG);
-//                    snackbar.show();
                 }
             });
         }
@@ -167,7 +144,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         return selected;
     }
 
-    public void setSelected(String sel) {
+    public void setSelection(String sel) {
         selected.put(sel, true);
     }
 
@@ -191,16 +168,4 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     public int getItemCount() {
         return mCursor.getCount();
     }
-    public void swapCursor(Cursor newCursor) {
-        if (mCursor != null) {
-            mCursor.close();
-        }
-
-        mCursor = newCursor;
-
-        if (newCursor != null) {
-            notifyDataSetChanged();
-        }
-    }
-
 }
