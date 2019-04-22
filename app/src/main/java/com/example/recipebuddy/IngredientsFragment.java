@@ -65,7 +65,7 @@ public class IngredientsFragment extends Fragment {
         MODE = getArguments().getInt("mode", 0);
         String selected = getArguments().getString("value", "");
         // specify an adapter (see also next example)
-        mAdapter = new DataAdapter(getKitchenIngredients(), MODE);
+        mAdapter = new DataAdapter(kitchenDB, MODE);
         mAdapter.setSelection(selected);
         recyclerView.setAdapter(mAdapter);
 
@@ -95,17 +95,5 @@ public class IngredientsFragment extends Fragment {
     public HashMap<String, Boolean> getSelected() {
         HashMap<String, Boolean> selected = mAdapter.getSelected();
         return selected;
-    }
-
-    public Cursor getKitchenIngredients() {
-        return kitchenDB.query(
-                KitchenColumns.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                KitchenColumns.COLUMN_TIMESTAMP + " DESC"
-        );
     }
 }

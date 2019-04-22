@@ -1,8 +1,10 @@
 package com.example.recipebuddy;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.support.design.widget.Snackbar;
@@ -26,6 +28,7 @@ import java.util.HashMap;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
     private Cursor mCursor;
+    private SQLiteDatabase kitchenDB;
     public String type;
     HashMap<String, Boolean> selected = new HashMap<String, Boolean>();
     int MODE;
@@ -49,16 +52,26 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
             viewBackground = v.findViewById(R.id.view_background);
             viewForeground = v.findViewById(R.id.view_foreground);
             toggleButton = (ToggleButton) v.findViewById(R.id.myToggleButton);
-            toggleButton.setChecked(false);
             toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.ic_baseline_star_border_24px));
             toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    //TODO handle favorited items
-                    if (isChecked)
-                        toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(view.getContext(),R.drawable.ic_baseline_star_24px));
-                    else
+                    KitchenDBHandler dbHelper = new KitchenDBHandler(view.getContext());
+                    SQLiteDatabase kitchenDB = dbHelper.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+
+                    if (isChecked) {
+                        cv.put(KitchenColumns.COLUMN_FAVORITED, 1);
+                        toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_baseline_star_24px));
+                        int numUpdated = kitchenDB.update(KitchenColumns.TABLE_NAME, cv, KitchenColumns.COLUMN_NAME + " = ?", new String[]{name.getText().toString()});
+//                        kitchenDB.query(KitchenColumns.TABLE_NAME, new String[]{KitchenColumns.COLUMN_FAVORITED}, KitchenColumns.COLUMN_NAME + " = ?", new String[]{name.getText().toString()})
+//                        Snackbar.make(view, String.valueOf(numUpdated), Snackbar.LENGTH_LONG).show();
+                    } else {
+                        cv.put(KitchenColumns.COLUMN_FAVORITED, 0);
                         toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_baseline_star_border_24px));
+                        int numUpdated = kitchenDB.update(KitchenColumns.TABLE_NAME, cv, KitchenColumns.COLUMN_NAME + " = ?", new String[]{name.getText().toString()});
+//                        Snackbar.make(view, String.valueOf(numUpdated), Snackbar.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -71,9 +84,22 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public DataAdapter(Cursor cursor) {
-        mCursor = cursor;
+    public DataAdapter(SQLiteDatabase db, int mode) {
+        kitchenDB = db;
         type = "Ingredients";
+        MODE = mode;
+    }
+
+    public Cursor getKitchenIngredients() {
+        return kitchenDB.query(
+                KitchenColumns.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                KitchenColumns.COLUMN_TIMESTAMP + " DESC"
+        );
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -86,6 +112,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     @Override
     public DataAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                      int viewType) {
+        mCursor = getKitchenIngredients();
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_favoritable_ingredient, parent, false);
@@ -153,6 +180,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
+        mCursor = getKitchenIngredients();
         if (!mCursor.moveToPosition(position)) {
             return;
         }
@@ -161,11 +189,21 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         if (selected.get(name) != null && selected.get(name)) {
             holder.viewForeground.setSelected(true);
         }
+
+        // check if this ingredient has been favorited by the user
+        int favorited = mCursor.getInt(mCursor.getColumnIndex(KitchenColumns.COLUMN_FAVORITED));
+
+        if (favorited == 0) {
+            holder.toggleButton.setChecked(false);
+        } else {
+            holder.toggleButton.setChecked(true);
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
+        mCursor = getKitchenIngredients();
         return mCursor.getCount();
     }
 }
