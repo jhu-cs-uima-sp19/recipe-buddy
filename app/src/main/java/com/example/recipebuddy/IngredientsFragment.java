@@ -88,7 +88,36 @@ public class IngredientsFragment extends Fragment {
             }
         });
         if (MODE == 1) {
-            fab.hide();
+            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_delete_24px));
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HashMap<String, Boolean> selected = getSelected();
+
+                    for (HashMap.Entry<String, Boolean> i : selected.entrySet()) {
+                        String key = i.getKey();
+                        Boolean value = i.getValue();
+                        if (value) {
+                            kitchenDB.delete(KitchenColumns.TABLE_NAME, "name = ?", new String[] {key});
+                        }
+                    }
+                    final View v = view;
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.putExtra("mode", 0);
+                    startActivity(intent);
+                    getActivity().finishAffinity();
+                    getActivity().overridePendingTransition(0,0);
+
+                    // delay clickability to prevent double click
+                    v.setClickable(false);
+                    v.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            v.setClickable(true);
+                        }
+                    }, 500);
+                }
+            });
         }
     }
 

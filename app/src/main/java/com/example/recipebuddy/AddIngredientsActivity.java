@@ -39,6 +39,9 @@ public class AddIngredientsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_ingredients);
 
+        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
+        kitchenDB = dbHelper.getWritableDatabase();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -50,41 +53,50 @@ public class AddIngredientsActivity extends AppCompatActivity {
             }
         });
 
-        String[] items = {"Chicken", "Beef", "Pork", "Lamb", "Turkey"};
-
         DBHandlerIngredient ingredientDBHelper = new DBHandlerIngredient(this);
         SQLiteDatabase ingredientDB = ingredientDBHelper.getReadableDatabase();
 
-
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                "name"
-        };
         // Filter results WHERE "title" = 'My Title'
         ArrayList<String> ingredients = new ArrayList<>();
 
         Cursor cursor = ingredientDB.query(
-                "ingredients",   // The table to query
-                null,             // The array of columns to return (pass null to get all)
-                null,              // The columns for the WHERE clause
-                null,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null             // The sort order
+                "ingredients",            // The table to query
+            null,                       // The array of columns to return (pass null to get all)
+                null,                  // The columns for the WHERE clause
+                null,               // The values for the WHERE clause
+                null,                  // don't group the rows
+                null,                    // don't filter by row groups
+                null                   // The sort order
         );
+
+        Cursor ingredientsCursor = kitchenDB.query(
+                KitchenColumns.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        ArrayList<String> alreadyInKitchen = new ArrayList<>();
+
+        if (ingredientsCursor.moveToFirst()) {
+            do {
+                alreadyInKitchen.add(ingredientsCursor.getString(ingredientsCursor.getColumnIndex("name")));
+            } while(ingredientsCursor.moveToNext());
+        }
 
         if (cursor.moveToFirst()) {
             do {
-                ingredients.add(cursor.getString(cursor.getColumnIndex("name")));
-            }while(cursor.moveToNext());
-
+                String ingredient = cursor.getString(cursor.getColumnIndex("name"));
+                if (!alreadyInKitchen.contains(ingredient)) {
+                    ingredients.add(ingredient);
+                }
+            } while(cursor.moveToNext());
         }
 
         data = createItemsList(ingredients);
-        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
-        kitchenDB = dbHelper.getWritableDatabase();
 
         final RecyclerView recyclerView = findViewById(R.id.recyclerViewIngredients);
 

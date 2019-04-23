@@ -133,18 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, AddIngredientsActivity.class);
                 startActivity(intent);
             } else if (MODE == 1) {
-                SectionsPagerAdapter mSectionsPagerAdapter = ((SectionsPagerAdapter)mViewPager.getAdapter());
-                HashMap<String, Boolean> selected = ((IngredientsFragment)mSectionsPagerAdapter.getItem(0)).getSelected();
-
-                String test = "";
-                for (HashMap.Entry<String, Boolean> i : selected.entrySet()) {
-                    String key = i.getKey();
-                    Boolean value = i.getValue();
-                    test = test + key + ": " + String.valueOf(value) + " ";
-                    if (value) {
-                        kitchenDB.delete(KitchenColumns.TABLE_NAME, "name = ?", new String[] {key});
-                    }
-                }
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("mode", 0);
                 startActivity(intent);
