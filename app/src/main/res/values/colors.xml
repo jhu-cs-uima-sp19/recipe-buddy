@@ -9,4 +9,7 @@
     <color name="white">#ffffff</color>
     <color name="gray">#989898</color>
     <color name="selected">#FDD692</color>
+    <color name ="colorDelete">#A9A9A9</color>
+    <color name ="colorDeleteDark">#808080</color>
+    <color name="colorDeleteAccent">#ffd5c9</color>
 </resources>

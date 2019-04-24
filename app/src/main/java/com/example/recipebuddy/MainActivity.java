@@ -1,17 +1,24 @@
 package com.example.recipebuddy;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.renderscript.Script;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,6 +29,8 @@ import android.view.View;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.view.Window;
+
 import com.example.recipebuddy.DBConstants.*;
 
 import java.io.IOException;
@@ -103,6 +112,30 @@ public class MainActivity extends AppCompatActivity {
         // Set up the TabLayout with the sections adapter.
         tabLayout = (TabLayout) findViewById(R.id.tabLayoutMain);
         tabLayout.setupWithViewPager(mViewPager);
+
+        // If in delete mode, change color scheme
+        if (MODE == 1) {
+
+            AppBarLayout appbar = findViewById(R.id.appbar);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // Change color of appbar and its components
+                int startColor = getResources().getColor(R.color.colorPrimary);
+                int endColor = getResources().getColor(R.color.colorDelete);
+                ObjectAnimator.ofArgb(appbar, "BackgroundColor", startColor, endColor).start();
+                ObjectAnimator.ofArgb(tabLayout, "BackgroundColor", startColor, endColor).start();
+                ObjectAnimator.ofArgb(toolbar, "BackgroundColor", startColor, endColor).start();
+
+                // Change color of status bar
+                startColor = getWindow().getStatusBarColor();
+                endColor = ContextCompat.getColor(this, R.color.colorDeleteDark);
+                ObjectAnimator.ofArgb(getWindow(), "statusBarColor", startColor, endColor).start();
+            } else {
+                appbar.setBackgroundColor(getResources().getColor(R.color.colorDelete));
+                tabLayout.setBackgroundColor(getResources().getColor(R.color.colorDelete));
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorDelete));
+            }
+        }
     }
 
     @Override
