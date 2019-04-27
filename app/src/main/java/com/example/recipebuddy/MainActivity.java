@@ -1,28 +1,41 @@
 package com.example.recipebuddy;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.renderscript.Script;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.view.Window;
+
 import com.example.recipebuddy.DBConstants.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,19 +60,30 @@ public class MainActivity extends AppCompatActivity {
      */
     private TabLayout tabLayout;
     private SQLiteDatabase kitchenDB;
+    Toolbar toolbar;
+    int MODE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MODE = getIntent().getIntExtra("mode", 0);
+        String selected = getIntent().getStringExtra("value");
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         DBHandlerRecipe recipeDB;
         recipeDB = new DBHandlerRecipe(this);
         DBHandlerIngredient ingredientsDB;
         ingredientsDB = new DBHandlerIngredient(this);
 
+        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
+        kitchenDB = dbHelper.getWritableDatabase();
 
         try {
             recipeDB.createDataBase();
@@ -68,10 +92,17 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // Pass in mode to ingredients fragment
+        Bundle bundle = new Bundle();
+        bundle.putInt("mode", MODE);
+        bundle.putString("value", selected);
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mSectionsPagerAdapter.addFragment(new IngredientsFragment(), "My Ingredients");
+        IngredientsFragment ingredientsFrag = new IngredientsFragment();
+        ingredientsFrag.setArguments(bundle);
+        mSectionsPagerAdapter.addFragment(ingredientsFrag, "My Ingredients");
         mSectionsPagerAdapter.addFragment(new SavedRecipesFragment(), "Saved Recipes");
 
         // Set up the ViewPager with the sections adapter.
@@ -82,18 +113,44 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayoutMain);
         tabLayout.setupWithViewPager(mViewPager);
 
+        // If in delete mode, change color scheme
+        if (MODE == 1) {
 
+            AppBarLayout appbar = findViewById(R.id.appbar);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                // Change color of appbar and its components
+                int startColor = getResources().getColor(R.color.colorPrimary);
+                int endColor = getResources().getColor(R.color.colorDelete);
+                ObjectAnimator.ofArgb(appbar, "BackgroundColor", startColor, endColor).start();
+                ObjectAnimator.ofArgb(tabLayout, "BackgroundColor", startColor, endColor).start();
+                ObjectAnimator.ofArgb(toolbar, "BackgroundColor", startColor, endColor).start();
+
+                // Change color of status bar
+                startColor = getWindow().getStatusBarColor();
+                endColor = ContextCompat.getColor(this, R.color.colorDeleteDark);
+                ObjectAnimator.ofArgb(getWindow(), "statusBarColor", startColor, endColor).start();
+            } else {
+                appbar.setBackgroundColor(getResources().getColor(R.color.colorDelete));
+                tabLayout.setBackgroundColor(getResources().getColor(R.color.colorDelete));
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorDelete));
+            }
+        }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        // Get current mode for the activity
+        // 0 -> view mode, 1 -> delete mode
+        if (MODE == 0) {
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        } else if (MODE == 1) {
+            getMenuInflater().inflate(R.menu.menu_main_delete, menu);
+        }
         return true;
     }
 
-    //
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -103,47 +160,21 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, AddIngredientsActivity.class);
-            startActivity(intent);
+            // Get current mode for the activity
+            // 0 -> view mode, 1 -> delete mode
+            if (MODE == 0) {
+                Intent intent = new Intent(this, AddIngredientsActivity.class);
+                startActivity(intent);
+            } else if (MODE == 1) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("mode", 0);
+                startActivity(intent);
+                finishAffinity();
+                overridePendingTransition(0,0);
+            }
         }
-
         return super.onOptionsItemSelected(item);
     }
-
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-//            return rootView;
-//        }
-//    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -177,22 +208,4 @@ public class MainActivity extends AppCompatActivity {
             fragmentTitles.add(title);
         }
     }
-
-//    private void addItem() {
-//
-//        if (mEditTextName.getText().toString().trim().length() == 0 || mAmount == 0) {
-//            return;
-//        }
-//
-//        String name = mEditTextName.getText().toString();
-//        ContentValues cv = new ContentValues();
-//        cv.put(GroceryContract.GroceryEntry.COLUMN_NAME, name);
-//        cv.put(GroceryContract.GroceryEntry.COLUMN_AMOUNT, mAmount);
-//
-//        mDatabase.insert(GroceryContract.GroceryEntry.TABLE_NAME, null, cv);
-//        mAdapter.swapCursor(getAllItems());
-//
-//        mEditTextName.getText().clear();
-//    }
-
 }

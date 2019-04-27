@@ -19,8 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:fabCustomSize="@dimen/fab_size"
-        app:maxImageSize="@dimen/fab_max_image_size"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:src="@drawable/ic_baseline_whatshot_24px" />
 
 </android.support.design.widget.CoordinatorLayout>

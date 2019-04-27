@@ -24,7 +24,9 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.recipebuddy.DBConstants.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class AddIngredientsActivity extends AppCompatActivity {
     private static ImageButton cancel;
@@ -37,10 +39,13 @@ public class AddIngredientsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_ingredients);
 
+        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
+        kitchenDB = dbHelper.getWritableDatabase();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        cancel = (ImageButton) findViewById(R.id.imageButton);
+        cancel = findViewById(R.id.imageButton);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,44 +53,52 @@ public class AddIngredientsActivity extends AppCompatActivity {
             }
         });
 
-        //TODO USE ALL POSSIBLE INGREDIENTS DATABASE instead of items array below
-        String[] items = {"Chicken", "Beef", "Pork", "Lamb", "Turkey"};
-
         DBHandlerIngredient ingredientDBHelper = new DBHandlerIngredient(this);
         SQLiteDatabase ingredientDB = ingredientDBHelper.getReadableDatabase();
 
-
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                "name"
-        };
         // Filter results WHERE "title" = 'My Title'
         ArrayList<String> ingredients = new ArrayList<>();
 
         Cursor cursor = ingredientDB.query(
-                "ingredients",   // The table to query
-                null,             // The array of columns to return (pass null to get all)
-                null,              // The columns for the WHERE clause
-                null,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null             // The sort order
+                "ingredients",            // The table to query
+            null,                       // The array of columns to return (pass null to get all)
+                null,                  // The columns for the WHERE clause
+                null,               // The values for the WHERE clause
+                null,                  // don't group the rows
+                null,                    // don't filter by row groups
+                null                   // The sort order
         );
+
+        Cursor ingredientsCursor = kitchenDB.query(
+                KitchenColumns.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        ArrayList<String> alreadyInKitchen = new ArrayList<>();
+
+        if (ingredientsCursor.moveToFirst()) {
+            do {
+                alreadyInKitchen.add(ingredientsCursor.getString(ingredientsCursor.getColumnIndex("name")));
+            } while(ingredientsCursor.moveToNext());
+        }
 
         if (cursor.moveToFirst()) {
             do {
-                ingredients.add(cursor.getString(cursor.getColumnIndex("name")));
-            }while(cursor.moveToNext());
-
+                String ingredient = cursor.getString(cursor.getColumnIndex("name"));
+                if (!alreadyInKitchen.contains(ingredient)) {
+                    ingredients.add(ingredient);
+                }
+            } while(cursor.moveToNext());
         }
 
         data = createItemsList(ingredients);
-        KitchenDBHandler dbHelper = new KitchenDBHandler(this);
-        kitchenDB = dbHelper.getWritableDatabase();
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewIngredients);
+        final RecyclerView recyclerView = findViewById(R.id.recyclerViewIngredients);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -104,49 +117,24 @@ public class AddIngredientsActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
 
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // Row is swiped from recycler view
-                // remove it from adapter
-            }
-
-            @Override
-            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                // view the background view
-            }
-        };
-
-        // attaching the touch helper to recycler view
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
-
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SparseBooleanArray selected = ((ItemsListAdapter)recyclerView.getAdapter()).getSelectedItems();
+                HashMap<String, Boolean> selected = ((ItemsListAdapter)recyclerView.getAdapter()).getSelectedItems();
                 ArrayList<String> ingredients = new ArrayList<>();
-                for (int i = 0; i < selected.size(); i++) {
-                    if (selected.valueAt(i)) {
-                        ingredients.add(data.get(selected.keyAt(i)).getTitle());
+                for (Map.Entry<String, Boolean> entry: selected.entrySet()) {
+                    String key = entry.getKey();
+                    Boolean val = entry.getValue();
+                    if (val) {
+                        addIngredient(key);
                     }
-                }
-                for (int i = 0; i < ingredients.size(); i++) {
-                    addIngredient(ingredients.get(i));
                 }
                 finishAffinity();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
-
-        fab.setImageBitmap(HelperMethods.textAsBitmap("ADD", 40, Color.WHITE));
     }
 
     public void addIngredient(String ingredient){

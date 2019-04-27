@@ -2,6 +2,10 @@ package com.example.recipebuddy;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
@@ -9,12 +13,16 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.ViewHolder> {
@@ -22,7 +30,7 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
 
     Context mContext;
     CustomItemClickListener listener;
-    SparseBooleanArray selectedItems = new SparseBooleanArray();
+    HashMap<String, Boolean> selected = new HashMap<String, Boolean>();
 
     public ItemsListAdapter(Context context, ArrayList<ItemsListSingleItem> itemList) {
         this.data = itemList;
@@ -33,17 +41,17 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_ingredient, parent, false);
         final ViewHolder mViewHolder = new ViewHolder(mView);
+        mViewHolder.setIsRecyclable(false);
         mView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                listener.onItemClick(v, mViewHolder.getPosition());
-                if (selectedItems.get(mViewHolder.getAdapterPosition(), false)) {
-                    selectedItems.delete(mViewHolder.getAdapterPosition());
-                    v.findViewById(R.id.view_foreground).setSelected(false);
-                }
-                else {
-                    selectedItems.put(mViewHolder.getAdapterPosition(), true);
-                    v.findViewById(R.id.view_foreground).setSelected(true);
+            public void onClick(View view) {
+                String value = data.get(mViewHolder.getAdapterPosition()).getTitle();
+                if (selected.get(value) != null && selected.get(value)) {
+                    selected.put(value, false);
+                    view.findViewById(R.id.view_foreground).setSelected(false);
+                } else {
+                    selected.put(value, true);
+                    view.findViewById(R.id.view_foreground).setSelected(true);
                 }
             }
         });
@@ -53,6 +61,10 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemTitle.setText(Html.fromHtml(data.get(position).getTitle()));
+        String name = data.get(position).getTitle();
+        if (selected.get(name) != null && selected.get(name)) {
+            holder.viewForeground.setSelected(true);
+        }
     }
 
 
@@ -67,19 +79,26 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
         this.listener = listener;
     }
 
-    public SparseBooleanArray getSelectedItems() {
-        return selectedItems;
+    public HashMap<String, Boolean> getSelectedItems() {
+        return selected;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView itemTitle;
-        public ImageView thumbnailImage;
+        public View view;
+        public TextView name, description, price;
+        public ImageView thumbnail;
+        public RelativeLayout viewBackground, viewForeground;
+        public ToggleButton toggleButton;
 
         ViewHolder(View v) {
             super(v);
+            view = v;
+            viewBackground = v.findViewById(R.id.view_background);
+            viewForeground = v.findViewById(R.id.view_foreground);
             itemTitle = (TextView) v
                     .findViewById(R.id.name);
-            thumbnailImage = (ImageView) v.findViewById(R.id.thumbnail);
+            thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
         }
     }
 }

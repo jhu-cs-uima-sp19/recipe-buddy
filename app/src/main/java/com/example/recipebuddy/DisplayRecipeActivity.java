@@ -89,8 +89,6 @@ public class DisplayRecipeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        fab.setImageBitmap(HelperMethods.textAsBitmap("DONE", 40, Color.WHITE));
     }
 
     /**

@@ -28,7 +28,7 @@
                 android:background="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:src="@drawable/ic_baseline_close_24px" />
 
         </android.support.v7.widget.Toolbar>
 
@@ -57,8 +57,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:fabCustomSize="@dimen/fab_size"
-        app:maxImageSize="40dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:src="@drawable/ic_baseline_check_24px" />
 
 </android.support.design.widget.CoordinatorLayout>

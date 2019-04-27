@@ -8,6 +8,7 @@
         android:id="@+id/view_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -35,6 +36,18 @@
             android:maxLines="1"
             android:textColor="@color/item_name"
             android:textSize="17dp" />
+
+        <ToggleButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/myToggleButton"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textOn=""
+            android:textOff=""
+            android:layout_alignParentRight="true"
+            android:layout_margin="24dp"
+            android:background="@drawable/ic_baseline_star_border_24px"/>
     </RelativeLayout>
 
 </FrameLayout>
