@@ -1,5 +1,7 @@
 package com.example.recipebuddy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,6 +44,65 @@ public class IngredientsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_ingredients, container, false);
         return view;
+    }
+
+    private void confirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Confirmation Dialog");
+        builder.setMessage("Are you sure you would like to remove selected ingredients?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                HashMap<String, Boolean> selected = getSelected();
+
+                for (HashMap.Entry<String, Boolean> i : selected.entrySet()) {
+                    String key = i.getKey();
+                    Boolean value = i.getValue();
+                    if (value) {
+                        kitchenDB.delete(KitchenColumns.TABLE_NAME, "name = ?", new String[] {key});
+                    }
+                }
+                final View v = view;
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("mode", 0);
+                startActivity(intent);
+                getActivity().finishAffinity();
+                getActivity().overridePendingTransition(0,0);
+
+                // delay clickability to prevent double click
+                v.setClickable(false);
+                v.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        v.setClickable(true);
+                    }
+                }, 500);
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final View v = view;
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("mode", 0);
+                startActivity(intent);
+                getActivity().finishAffinity();
+                getActivity().overridePendingTransition(0,0);
+
+                // delay clickability to prevent double click
+                v.setClickable(false);
+                v.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        v.setClickable(true);
+                    }
+                }, 500);
+            }
+        });
+
+        builder.show();
     }
 
     @Override
@@ -92,30 +153,7 @@ public class IngredientsFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HashMap<String, Boolean> selected = getSelected();
-
-                    for (HashMap.Entry<String, Boolean> i : selected.entrySet()) {
-                        String key = i.getKey();
-                        Boolean value = i.getValue();
-                        if (value) {
-                            kitchenDB.delete(KitchenColumns.TABLE_NAME, "name = ?", new String[] {key});
-                        }
-                    }
-                    final View v = view;
-                    Intent intent = new Intent(getContext(), MainActivity.class);
-                    intent.putExtra("mode", 0);
-                    startActivity(intent);
-                    getActivity().finishAffinity();
-                    getActivity().overridePendingTransition(0,0);
-
-                    // delay clickability to prevent double click
-                    v.setClickable(false);
-                    v.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            v.setClickable(true);
-                        }
-                    }, 500);
+                    confirmDialog();
                 }
             });
         }
