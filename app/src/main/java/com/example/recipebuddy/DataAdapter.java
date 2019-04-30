@@ -187,6 +187,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         }
         String name = mCursor.getString(mCursor.getColumnIndex(KitchenColumns.COLUMN_NAME));
         holder.name.setText(name);
+        Context c = holder.itemView.getContext();
+        holder.thumbnail.setImageResource(c.getResources().getIdentifier("th_" + name.toLowerCase().replaceAll(" ", "_"), "drawable", c.getPackageName()));
         if (selected.get(name) != null && selected.get(name)) {
             holder.viewForeground.setSelected(true);
         }
