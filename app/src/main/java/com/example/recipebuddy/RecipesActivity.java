@@ -29,7 +29,7 @@ public class RecipesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        cancel = (ImageButton) findViewById(R.id.closeRecipes);
+        cancel = (ImageButton) findViewById(R.id.filterRecipes);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

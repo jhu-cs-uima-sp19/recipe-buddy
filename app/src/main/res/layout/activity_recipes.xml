@@ -20,7 +20,7 @@
             >
 
             <ImageButton
-                android:id="@+id/closeRecipes"
+                android:id="@+id/filterRecipes"
                 android:layout_width="23dp"
                 android:layout_height="27dp"
                 android:layout_gravity="end"
