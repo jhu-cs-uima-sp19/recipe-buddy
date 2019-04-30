@@ -85,7 +85,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipeFilterAc
         if (cursor.moveToFirst()) {
             do {
                 for (String item : kitchenItems) {
-                    if (cursor.getString(cursor.getColumnIndex("main_ingredient")).contains(item.toLowerCase())) {
+                    if (cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase().contains(item.toLowerCase())) {
                         items.add(cursor.getString(cursor.getColumnIndex("name")));
                     }
                 }
