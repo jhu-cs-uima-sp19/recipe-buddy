@@ -46,6 +46,7 @@ public class RecipesListAdapter extends RecyclerView.Adapter<RecipesListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemTitle.setText(Html.fromHtml(data.get(position).getTitle()));
+        holder.thumbnailImage.setImageDrawable(data.get(position).getThumbnail());
     }
 
     @Override

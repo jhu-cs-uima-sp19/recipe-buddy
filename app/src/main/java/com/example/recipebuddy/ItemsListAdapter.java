@@ -61,6 +61,7 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.itemTitle.setText(Html.fromHtml(data.get(position).getTitle()));
+        holder.thumbnail.setImageDrawable(data.get(position).getThumbnail());
         String name = data.get(position).getTitle();
         if (selected.get(name) != null && selected.get(name)) {
             holder.viewForeground.setSelected(true);
