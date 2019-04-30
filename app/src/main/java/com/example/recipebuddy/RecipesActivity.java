@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class RecipesActivity extends AppCompatActivity {
 
-    private static ImageButton cancel;
+    private static ImageButton filter;
     private ArrayList<ItemsListSingleItem> data;
 
     @Override
@@ -29,8 +29,8 @@ public class RecipesActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        cancel = (ImageButton) findViewById(R.id.filterRecipes);
-        cancel.setOnClickListener(new View.OnClickListener() {
+        filter = (ImageButton) findViewById(R.id.filterRecipes);
+        filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
