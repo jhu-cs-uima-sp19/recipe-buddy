@@ -185,7 +185,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
             out.add(new ItemsListSingleItem(
                     i + 1,
                     list.get(i),
-                    getResources().getDrawable(getResources().getIdentifier("th_" + list.get(i).replaceAll(" ", "_"), "drawable", getPackageName()))
+                    getResources().getDrawable(getResources().getIdentifier("th_" + list.get(i).toLowerCase().replaceAll(" ", "_"), "drawable", getPackageName()))
             ));
         }
         return out;
