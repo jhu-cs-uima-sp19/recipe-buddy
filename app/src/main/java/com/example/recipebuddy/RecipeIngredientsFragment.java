@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RecipeIngredientsFragment extends Fragment {
     View view;
@@ -86,6 +87,10 @@ public class RecipeIngredientsFragment extends Fragment {
         // use a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
+
+        // specify an adapter (see also next example)
+
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
         // specify an adapter (see also next example)
         RecipeIngredientsDataAdapter mAdapter = new RecipeIngredientsDataAdapter(ingredients, "RecipeIngredients");

@@ -119,6 +119,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         if (type.compareTo("RecipeIngredients") == 0) {
             v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.view_recipe_ingredient, parent, false);
+
         }
         final MyViewHolder mViewHolder = new  DataAdapter.MyViewHolder(v);
         mViewHolder.setIsRecyclable(false);
