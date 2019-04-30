@@ -23,7 +23,7 @@ public class RecipeFilterActivity extends AppCompatDialogFragment{
             View view = inflater.inflate(R.layout.filter_popup, null);
 
             builder.setView(view)
-                    .setTitle("Login")
+                    .setTitle("Filter Recipes")
                     .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
