@@ -20,7 +20,7 @@
             >
 
             <ImageButton
-                android:id="@+id/closeRecipes"
+                android:id="@+id/filterRecipes"
                 android:layout_width="23dp"
                 android:layout_height="27dp"
                 android:layout_gravity="end"
@@ -29,12 +29,13 @@
                 android:background="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_baseline_close_24px"/>
+                android:src="@drawable/baseline_filter_list_white_18dp"/>
 
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_recipes" />
+
 
 </android.support.design.widget.CoordinatorLayout>
