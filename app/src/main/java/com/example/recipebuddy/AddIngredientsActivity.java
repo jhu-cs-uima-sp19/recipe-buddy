@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,7 +66,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
 
         Cursor cursor = ingredientDB.query(
                 "ingredients",            // The table to query
-            null,                       // The array of columns to return (pass null to get all)
+                null,                       // The array of columns to return (pass null to get all)
                 null,                  // The columns for the WHERE clause
                 null,               // The values for the WHERE clause
                 null,                  // don't group the rows
@@ -184,7 +185,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
             out.add(new ItemsListSingleItem(
                     i + 1,
                     list.get(i),
-                    ""
+                    getResources().getDrawable(getResources().getIdentifier("th_" + list.get(i).replaceAll(" ", "_"), "drawable", getPackageName()))
             ));
         }
         return out;

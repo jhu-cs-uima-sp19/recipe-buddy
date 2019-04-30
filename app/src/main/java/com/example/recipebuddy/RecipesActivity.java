@@ -125,7 +125,7 @@ public class RecipesActivity extends AppCompatActivity {
             out.add(new ItemsListSingleItem(
                     i + 1,
                     list.get(i),
-                    ""
+                    getResources().getDrawable(getResources().getIdentifier("recipe_" + list.get(i).toLowerCase().replaceAll(" ", "_"), "drawable", getPackageName()))
             ));
         }
         return out;
