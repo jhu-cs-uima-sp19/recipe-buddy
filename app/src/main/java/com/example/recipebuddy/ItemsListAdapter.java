@@ -73,6 +73,12 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
         return data.size();
     }
 
+    public void filterList(ArrayList<ItemsListSingleItem> filteredList) {
+        this.data = filteredList;
+        notifyDataSetChanged();
+
+    }
+
     public ItemsListAdapter(Context mContext, ArrayList<ItemsListSingleItem> data, CustomItemClickListener listener) {
         this.data = data;
         this.mContext = mContext;

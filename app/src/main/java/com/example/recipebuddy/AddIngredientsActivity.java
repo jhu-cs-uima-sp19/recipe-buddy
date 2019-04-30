@@ -14,9 +14,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -33,6 +36,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     private ArrayList<ItemsListSingleItem> data;
     private HashSet<Integer> selected;
     private SQLiteDatabase kitchenDB;
+    private ItemsListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,11 +115,30 @@ public class AddIngredientsActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
 
         // specify an adapter (see also next example)
-        ItemsListAdapter adapter = new ItemsListAdapter(this, data, new CustomItemClickListener() {
+        adapter = new ItemsListAdapter(this, data, new CustomItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {}
         });
         recyclerView.setAdapter(adapter);
+
+        // edit text as search bar
+        EditText editText = findViewById(R.id.edittextIngredients);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                filter(s.toString());
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +158,17 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void filter(String text) {
+        ArrayList<ItemsListSingleItem> filteredList = new ArrayList<>();
+
+        for (ItemsListSingleItem item : data) {
+            if (item.getTitle().toLowerCase().contains(text.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        adapter.filterList(filteredList);
     }
 
     public void addIngredient(String ingredient){
