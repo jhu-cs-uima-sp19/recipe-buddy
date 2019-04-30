@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -182,10 +183,13 @@ public class AddIngredientsActivity extends AppCompatActivity {
     public ArrayList<ItemsListSingleItem> createItemsList(ArrayList<String> list) {
         ArrayList<ItemsListSingleItem> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
+            Log.i("createItemsList", list.get(i));
+            Drawable thumb = getResources().getDrawable(getResources().getIdentifier("ing_" + list.get(i).toLowerCase().replaceAll(" ", "_"), "drawable", getPackageName()));
             out.add(new ItemsListSingleItem(
                     i + 1,
                     list.get(i),
-                    getResources().getDrawable(getResources().getIdentifier("th_" + list.get(i).replaceAll(" ", "_"), "drawable", getPackageName()))
+//                    getResources().getDrawable(getResources().getIdentifier("th_apple", "drawable", getPackageName()))
+                    thumb
             ));
         }
         return out;
