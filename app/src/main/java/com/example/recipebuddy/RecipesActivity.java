@@ -18,7 +18,7 @@ import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
-public class RecipesActivity extends AppCompatActivity {
+public class RecipesActivity extends AppCompatActivity implements RecipeFilterActivity.ExampleDialogListener {
 
     private static ImageButton filter;
     private ArrayList<ItemsListSingleItem> data;
@@ -34,7 +34,7 @@ public class RecipesActivity extends AppCompatActivity {
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                openFilterDialog();
             }
         });
 
@@ -78,19 +78,19 @@ public class RecipesActivity extends AppCompatActivity {
         if (kitchenCursor.moveToFirst()) {
             do {
                 kitchenItems.add(kitchenCursor.getString(kitchenCursor.getColumnIndex("name")));
-            }while(kitchenCursor.moveToNext());
+            } while (kitchenCursor.moveToNext());
 
         }
 
         if (cursor.moveToFirst()) {
             do {
-                for(String item : kitchenItems){
+                for (String item : kitchenItems) {
                     if (cursor.getString(cursor.getColumnIndex("main_ingredient")).contains(item.toLowerCase())) {
                         items.add(cursor.getString(cursor.getColumnIndex("name")));
                     }
                 }
 
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
 
         }
 
@@ -132,4 +132,15 @@ public class RecipesActivity extends AppCompatActivity {
         }
         return out;
     }
+
+    public void openFilterDialog() {
+        RecipeFilterActivity exampleDialog = new RecipeFilterActivity();
+        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+
+    }
+    @Override
+    public void applyTexts(String username, String password) {
+        return;
+    }
 }
+
