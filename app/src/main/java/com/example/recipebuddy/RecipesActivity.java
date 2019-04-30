@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -122,6 +123,7 @@ public class RecipesActivity extends AppCompatActivity {
     public ArrayList<ItemsListSingleItem> createItemsList(ArrayList<String> list) {
         ArrayList<ItemsListSingleItem> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
+            Log.i("recipes activity", list.get(i).toLowerCase().replaceAll(" ", "_"));
             out.add(new ItemsListSingleItem(
                     i + 1,
                     list.get(i),
