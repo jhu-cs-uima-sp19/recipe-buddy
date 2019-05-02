@@ -26,6 +26,8 @@ import android.widget.ImageButton;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.ImageView;
+
 import com.example.recipebuddy.DBConstants.*;
 
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     private HashSet<Integer> selected;
     private SQLiteDatabase kitchenDB;
     private ItemsListAdapter adapter;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +127,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // edit text as search bar
-        EditText editText = findViewById(R.id.edittextIngredients);
+        editText = findViewById(R.id.edittextIngredients);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,6 +142,14 @@ public class AddIngredientsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 filter(s.toString());
+            }
+        });
+
+        ImageButton editTextClear = findViewById(R.id.edittextIngredientsClear);
+        editTextClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.getText().clear();
             }
         });
 
