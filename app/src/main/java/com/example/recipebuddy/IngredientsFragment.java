@@ -140,6 +140,7 @@ public class IngredientsFragment extends Fragment {
                     Toast.makeText(getContext(),"No Ingredients in Kitchen",Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 final View v = view;
                 Intent intent = new Intent(getContext(), RecipesActivity.class);
                 startActivity(intent);
