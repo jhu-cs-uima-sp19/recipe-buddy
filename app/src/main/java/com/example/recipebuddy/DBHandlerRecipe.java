@@ -22,7 +22,7 @@ public class DBHandlerRecipe extends SQLiteOpenHelper {
     public static final String COLUMN_PRODUCTNAME = "name";
 
     //need to fix path
-    private static String DB_PATH = "/data/data/com.example.recipebuddy/databases/";
+    private static String DB_PATH = "";
 
     private static String DB_NAME = "recipes.db";
 
@@ -33,6 +33,7 @@ public class DBHandlerRecipe extends SQLiteOpenHelper {
 
         super(context, DB_NAME, null, 1);
         this.myContext = context;
+        DB_PATH = context.getDatabasePath(DB_NAME).toString();
     }
     public void createDataBase() throws IOException{
 

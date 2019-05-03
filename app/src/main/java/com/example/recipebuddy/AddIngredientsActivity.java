@@ -20,12 +20,16 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.ImageView;
+
 import com.example.recipebuddy.DBConstants.*;
 
 import java.util.ArrayList;
@@ -39,6 +43,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     private HashSet<Integer> selected;
     private SQLiteDatabase kitchenDB;
     private ItemsListAdapter adapter;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +128,18 @@ public class AddIngredientsActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
 
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+//                Log.i("recyclerTouched", "it was touched");
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(v.getContext().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return false;
+            }
+        });
+
         // edit text as search bar
-        EditText editText = findViewById(R.id.edittextIngredients);
+        editText = findViewById(R.id.edittextIngredients);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,6 +154,27 @@ public class AddIngredientsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 filter(s.toString());
+            }
+        });
+
+//        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                Log.i("focus_change", Boolean.toString(hasFocus));
+//                if(!hasFocus){
+//                    InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+//                }
+//            }
+//        });
+
+
+        ImageButton editTextClear = findViewById(R.id.edittextIngredientsClear);
+        editTextClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.getText().clear();
             }
         });
 
@@ -183,7 +219,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     public ArrayList<ItemsListSingleItem> createItemsList(ArrayList<String> list) {
         ArrayList<ItemsListSingleItem> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            Log.i("createItemsList", list.get(i));
+//            Log.i("createItemsList", list.get(i));
             Drawable thumb = getResources().getDrawable(getResources().getIdentifier("ing_" + list.get(i).trim().toLowerCase().replaceAll(" ", "_"), "drawable", getPackageName()));
             out.add(new ItemsListSingleItem(
                     i + 1,

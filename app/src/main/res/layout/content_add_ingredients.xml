@@ -9,11 +9,29 @@
     tools:context=".AddIngredientsActivity"
     tools:showIn="@layout/activity_add_ingredients">
 
-    <EditText
-        android:id="@+id/edittextIngredients"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"/>
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edittextIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"/>
+
+        <ImageButton
+            android:id="@+id/edittextIngredientsClear"
+            android:layout_width="wrap_content"
+            android:layout_alignBottom="@+id/edittextIngredients"
+            android:src="@android:drawable/ic_input_delete"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/edittextIngredients"
+            android:tint="@color/gray"
+            android:padding="8dp"
+            android:background="@null"
+            tools:ignore="contentDescription" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewIngredients"

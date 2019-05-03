@@ -13,12 +13,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
 
-public class RecipesActivity extends AppCompatActivity implements RecipeFilterActivity.ExampleDialogListener {
+public class RecipesActivity extends AppCompatActivity{
 
     private static ImageButton filter;
     private ArrayList<ItemsListSingleItem> data;
@@ -134,13 +136,9 @@ public class RecipesActivity extends AppCompatActivity implements RecipeFilterAc
     }
 
     public void openFilterDialog() {
-        RecipeFilterActivity exampleDialog = new RecipeFilterActivity();
-        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+        RecipeFilterActivity filterDialog = new RecipeFilterActivity();
+        filterDialog.show(getSupportFragmentManager(), "filter dialog");
 
-    }
-    @Override
-    public void applyTexts(String username, String password) {
-        return;
     }
 }
 

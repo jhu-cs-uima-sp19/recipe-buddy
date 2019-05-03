@@ -16,7 +16,7 @@ import java.io.OutputStream;
 public class DBHandlerIngredient extends SQLiteOpenHelper {
 
     //need to fix path
-    private static String DB_PATH = "/data/data/com.example.recipebuddy/databases/";
+    private static String DB_PATH = "";
 
     private static String DB_NAME = "ingredients.db";
 
@@ -27,6 +27,7 @@ public class DBHandlerIngredient extends SQLiteOpenHelper {
 
         super(context, DB_NAME, null, 1);
         this.myContext = context;
+        DB_PATH = context.getDatabasePath(DB_NAME).toString();
     }
 
     public void createDataBase() throws IOException {

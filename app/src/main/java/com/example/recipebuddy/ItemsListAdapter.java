@@ -13,6 +13,7 @@ import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -53,6 +54,8 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
                     selected.put(value, true);
                     view.findViewById(R.id.view_foreground).setSelected(true);
                 }
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
         return mViewHolder;
