@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.recipebuddy.DBConstants.*;
@@ -134,6 +136,10 @@ public class IngredientsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mAdapter.getItemCount() == 0) {
+                    Toast.makeText(getContext(),"No Ingredients in Kitchen",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 final View v = view;
                 Intent intent = new Intent(getContext(), RecipesActivity.class);
                 startActivity(intent);
@@ -153,6 +159,13 @@ public class IngredientsFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    int selectedCount = 0;
+                    for (boolean val : mAdapter.getSelected().values()) {
+                        if (val) selectedCount++;
+                    }
+                    if (selectedCount == 0) {
+                        return;
+                    }
                     confirmDialog();
                 }
             });
