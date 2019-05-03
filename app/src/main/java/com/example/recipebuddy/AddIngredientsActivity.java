@@ -219,7 +219,7 @@ public class AddIngredientsActivity extends AppCompatActivity {
     public ArrayList<ItemsListSingleItem> createItemsList(ArrayList<String> list) {
         ArrayList<ItemsListSingleItem> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            Log.i("createItemsList", list.get(i));
+//            Log.i("createItemsList", list.get(i));
             Drawable thumb = getResources().getDrawable(getResources().getIdentifier("ing_" + list.get(i).trim().toLowerCase().replaceAll(" ", "_"), "drawable", getPackageName()));
             out.add(new ItemsListSingleItem(
                     i + 1,
