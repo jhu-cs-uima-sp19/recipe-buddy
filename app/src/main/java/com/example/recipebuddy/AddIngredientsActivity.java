@@ -20,7 +20,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.content.ContentValues;
@@ -126,6 +128,16 @@ public class AddIngredientsActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
 
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+//                Log.i("recyclerTouched", "it was touched");
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(v.getContext().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return false;
+            }
+        });
+
         // edit text as search bar
         editText = findViewById(R.id.edittextIngredients);
         editText.addTextChangedListener(new TextWatcher() {
@@ -144,6 +156,19 @@ public class AddIngredientsActivity extends AppCompatActivity {
                 filter(s.toString());
             }
         });
+
+//        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                Log.i("focus_change", Boolean.toString(hasFocus));
+//                if(!hasFocus){
+//                    InputMethodManager imm = (InputMethodManager)getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+//                }
+//            }
+//        });
+
 
         ImageButton editTextClear = findViewById(R.id.edittextIngredientsClear);
         editTextClear.setOnClickListener(new View.OnClickListener() {
