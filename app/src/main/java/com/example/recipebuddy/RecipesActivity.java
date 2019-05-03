@@ -99,6 +99,7 @@ public class RecipesActivity extends AppCompatActivity{
 
         if (items.isEmpty()) {
             Toast.makeText(getApplicationContext(),"No recipes with selected ingredients",Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         data = createItemsList(items);
