@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -96,6 +97,11 @@ public class RecipesActivity extends AppCompatActivity{
 
         }
 
+        if (items.isEmpty()) {
+            Toast.makeText(getApplicationContext(),"No recipes with selected ingredients",Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
         data = createItemsList(items);
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewRecipes);
@@ -125,7 +131,7 @@ public class RecipesActivity extends AppCompatActivity{
     public ArrayList<ItemsListSingleItem> createItemsList(ArrayList<String> list) {
         ArrayList<ItemsListSingleItem> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            Log.i("recipes activity", list.get(i).toLowerCase().replaceAll(" ", "_"));
+//            Log.i("recipes activity", list.get(i).toLowerCase().replaceAll(" ", "_"));
             out.add(new ItemsListSingleItem(
                     i + 1,
                     list.get(i),

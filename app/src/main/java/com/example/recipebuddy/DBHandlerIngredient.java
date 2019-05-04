@@ -17,7 +17,6 @@ public class DBHandlerIngredient extends SQLiteOpenHelper {
 
     //need to fix path
     private static String DB_PATH = "";
-
     private static String DB_NAME = "ingredients.db";
 
     private SQLiteDatabase myDataBase;
@@ -37,19 +36,13 @@ public class DBHandlerIngredient extends SQLiteOpenHelper {
         if (dbExist) {
             //do nothing - database already exist
         } else {
-
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
-
             try {
-
                 copyDataBase();
-
             } catch (IOException e) {
-
                 throw new Error("Error copying database");
-
             }
         }
 
@@ -60,9 +53,8 @@ public class DBHandlerIngredient extends SQLiteOpenHelper {
         SQLiteDatabase checkDB = null;
 
         try {
-            String myPath = DB_PATH + DB_NAME;
+            String myPath = DB_PATH;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-
         } catch (SQLiteException e) {
 
             //database does't exist yet.
@@ -84,7 +76,7 @@ public class DBHandlerIngredient extends SQLiteOpenHelper {
         InputStream myInput = myContext.getAssets().open(DB_NAME);
 
         // Path to the just created empty db
-        String outFileName = DB_PATH + DB_NAME;
+        String outFileName = DB_PATH;
 
         //Open the empty db as the output stream
         OutputStream myOutput = new FileOutputStream(outFileName);
@@ -106,7 +98,7 @@ public class DBHandlerIngredient extends SQLiteOpenHelper {
     public void openDataBase() throws SQLException {
 
         //Open the database
-        String myPath = DB_PATH + DB_NAME;
+        String myPath = DB_PATH;
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 
     }
