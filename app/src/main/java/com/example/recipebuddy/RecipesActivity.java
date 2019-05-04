@@ -20,12 +20,14 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RecipesActivity extends AppCompatActivity implements AllergyFilterDialog.AllergyDialogListener{
 
     private static ImageButton filter;
     private ArrayList<ItemsListSingleItem> data;
     private ArrayList<String> allergies;
+    private double threshold = 0.5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
         String[] projectionRecipe = {
                 "name",
                 "main_ingredient",
+                "ingredients",
                 "allergies"
         };
 
@@ -92,24 +95,65 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
 
         if (cursor.moveToFirst()) {
             do {
+                //threshold = 0.5;
+                Boolean has_ingredients = false;
+                Boolean has_main = false;
+                double match = 0.0;
+                String[] ingredients = cursor.getString(cursor.getColumnIndex("ingredients")).toLowerCase().split(",");
+                String recipe_ingredient = cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase();
                 for (String item : kitchenItems) {
-                    String recipe_ingredient = cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase();
-                    String recipe_allergy = cursor.getString(cursor.getColumnIndex("allergies")).trim().toLowerCase();
                     if (recipe_ingredient.contains(item.toLowerCase())) {
-                        Boolean check_allergy = false;
-                        if(allergies != null){
-                            for (String allergy : allergies){
-                                if(allergy.toLowerCase().equals(recipe_allergy)){
-                                    check_allergy = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if(!check_allergy){
-                            items.add(cursor.getString(cursor.getColumnIndex("name")));
-                        }
+                        match += 0.4;
+                        has_main = true;
+                        break;
                     }
                 }
+                if(has_main){
+                    for(String ing : ingredients){
+                        String toCompare = ing.substring(0, 1).toUpperCase() + ing.substring(1);
+                        if(kitchenItems.contains(toCompare)){
+                            match += 0.15;
+                        }
+                    }
+                    if(match >= threshold){
+
+                        has_ingredients = true;
+                    }
+                }
+
+                System.out.println(Arrays.asList(ingredients));
+                System.out.println(kitchenItems);
+                System.out.println(match + "qwerqrr");
+//                String recipe_ingredient = cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase();
+
+                //Main ingredient match
+//                Boolean has_ingredients = false;
+//                for (String item : kitchenItems) {
+//
+//
+//                    if (recipe_ingredient.contains(item.toLowerCase())) {
+//
+//                        has_ingredients = true;
+//                        break;
+//                    }
+//                }
+                if(has_ingredients){
+                    String recipe_allergy = cursor.getString(cursor.getColumnIndex("allergies")).trim().toLowerCase();
+
+                    Boolean check_allergy = false;
+                    if(allergies != null){
+                        for (String allergy : allergies){
+                            if(allergy.toLowerCase().equals(recipe_allergy)){
+                                check_allergy = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(!check_allergy){
+                        items.add(cursor.getString(cursor.getColumnIndex("name")));
+                    }
+                }
+
 
             } while (cursor.moveToNext());
 
