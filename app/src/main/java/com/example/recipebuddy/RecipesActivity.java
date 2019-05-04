@@ -100,19 +100,22 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
                 Boolean has_main = false;
                 double match = 0.0;
                 String[] ingredients = cursor.getString(cursor.getColumnIndex("ingredients")).toLowerCase().split(",");
+                int total_ing = ingredients.length;
                 String recipe_ingredient = cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase();
                 for (String item : kitchenItems) {
                     if (recipe_ingredient.contains(item.toLowerCase())) {
-                        match += 0.4;
+                        match += (1.0/total_ing)*3;
                         has_main = true;
                         break;
                     }
                 }
                 if(has_main){
                     for(String ing : ingredients){
-                        String toCompare = ing.substring(0, 1).toUpperCase() + ing.substring(1);
-                        if(kitchenItems.contains(toCompare)){
-                            match += 0.15;
+                        if(!ing.toLowerCase().equals(recipe_ingredient)) {
+                            String toCompare = ing.substring(0, 1).toUpperCase() + ing.substring(1);
+                            if (kitchenItems.contains(toCompare)) {
+                                match += 1.0 / total_ing;
+                            }
                         }
                     }
                     if(match >= threshold){
@@ -121,8 +124,6 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
                     }
                 }
 
-                System.out.println(Arrays.asList(ingredients));
-                System.out.println(kitchenItems);
                 System.out.println(match + "qwerqrr");
 //                String recipe_ingredient = cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase();
 
