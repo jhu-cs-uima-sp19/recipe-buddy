@@ -19,6 +19,7 @@ import java.util.List;
 public class AllergyFilterDialog extends AppCompatDialogFragment{
 
     ArrayList<String> list = new ArrayList<String>();
+    private AllergyDialogListener listener;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final String[] items = getResources().getStringArray(R.array.allergy_selection);
@@ -41,9 +42,24 @@ public class AllergyFilterDialog extends AppCompatDialogFragment{
                     selections = selections + "\n" + ms;
                 }
                 Toast.makeText(getActivity(), "Selected: " + selections, Toast.LENGTH_SHORT).show();
+                listener.submitted(list);
             }
         });
         return builder.create();
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (AllergyDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() +
+                    "must implement ExampleDialogListener");
+        }
+    }
+    public interface AllergyDialogListener {
+        void submitted(ArrayList<String> data);
     }
 
 

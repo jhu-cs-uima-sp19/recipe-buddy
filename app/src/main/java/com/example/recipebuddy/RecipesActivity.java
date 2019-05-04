@@ -21,14 +21,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class RecipesActivity extends AppCompatActivity{
+public class RecipesActivity extends AppCompatActivity implements AllergyFilterDialog.AllergyDialogListener{
 
     private static ImageButton filter;
     private ArrayList<ItemsListSingleItem> data;
+    private ArrayList<String> allergies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        queryData();
+    }
+    protected void queryData(){
         setContentView(R.layout.activity_recipes);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,7 +57,8 @@ public class RecipesActivity extends AppCompatActivity{
         };
         String[] projectionRecipe = {
                 "name",
-                "main_ingredient"
+                "main_ingredient",
+                "allergies"
         };
 
         // Filter results WHERE "title" = 'My Title'
@@ -88,8 +93,21 @@ public class RecipesActivity extends AppCompatActivity{
         if (cursor.moveToFirst()) {
             do {
                 for (String item : kitchenItems) {
-                    if (cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase().contains(item.toLowerCase())) {
-                        items.add(cursor.getString(cursor.getColumnIndex("name")));
+                    String recipe_ingredient = cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase();
+                    String recipe_allergy = cursor.getString(cursor.getColumnIndex("allergies")).trim().toLowerCase();
+                    if (recipe_ingredient.contains(item.toLowerCase())) {
+                        Boolean check_allergy = false;
+                        if(allergies != null){
+                            for (String allergy : allergies){
+                                if(allergy.toLowerCase().equals(recipe_allergy)){
+                                    check_allergy = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(!check_allergy){
+                            items.add(cursor.getString(cursor.getColumnIndex("name")));
+                        }
                     }
                 }
 
@@ -147,6 +165,12 @@ public class RecipesActivity extends AppCompatActivity{
         AllergyFilterDialog filterDialog = new AllergyFilterDialog();
         filterDialog.show(getSupportFragmentManager(), "filter dialog");
 
+    }
+    @Override
+    public void submitted(ArrayList<String> input){
+        allergies = input;
+        System.out.println(allergies);
+        queryData();
     }
 }
 
