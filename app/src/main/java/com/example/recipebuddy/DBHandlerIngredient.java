@@ -17,6 +17,7 @@ public class DBHandlerIngredient extends SQLiteOpenHelper {
 
     //need to fix path
     private static String DB_PATH = "";
+    private static String DATABASE = "ingredients";
     private static String DB_NAME = "ingredients.db";
 
     private SQLiteDatabase myDataBase;
@@ -58,6 +59,7 @@ public class DBHandlerIngredient extends SQLiteOpenHelper {
         } catch (SQLiteException e) {
 
             //database does't exist yet.
+            checkDB = null;
 
         }
 

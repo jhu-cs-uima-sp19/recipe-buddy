@@ -29,6 +29,7 @@ import java.util.HashMap;
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> {
     private Cursor mCursor;
     private SQLiteDatabase kitchenDB;
+    private SQLiteDatabase ingredDB;
     public String type;
     HashMap<String, Boolean> selected = new HashMap<String, Boolean>();
     int MODE;
@@ -90,6 +91,14 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         MODE = mode;
     }
 
+    // Provide a suitable constructor (depends on the kind of dataset)
+    public DataAdapter(SQLiteDatabase kitchenDB, SQLiteDatabase ingredDB, int mode) {
+        this.kitchenDB = kitchenDB;
+        this.ingredDB = ingredDB;
+        type = "Ingredients";
+        MODE = mode;
+    }
+
     public Cursor getKitchenIngredients() {
         return kitchenDB.query(
                 KitchenColumns.TABLE_NAME,
@@ -101,6 +110,16 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                 KitchenColumns.COLUMN_TIMESTAMP + " DESC"
         );
     }
+
+//    public Cursor getIngredient() {
+//        String [] columns = {"name"};
+//
+//        return ingredDB.query("ingredients",
+//                null,
+//                "name",
+//
+//                )
+//    }
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public DataAdapter(Cursor cursor, String type) {

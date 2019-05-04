@@ -71,7 +71,7 @@ public class DBHandlerRecipe extends SQLiteOpenHelper {
         }catch(SQLiteException e){
 
             //database does't exist yet.
-
+            checkDB = null;
         }
 
         if(checkDB != null){
