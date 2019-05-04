@@ -32,7 +32,7 @@ public class RecipesActivity extends AppCompatActivity{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        filter = (ImageButton) findViewById(R.id.filterRecipes);
+        filter = findViewById(R.id.filterRecipes);
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,7 +136,9 @@ public class RecipesActivity extends AppCompatActivity{
     }
 
     public void openFilterDialog() {
-        RecipeFilterActivity filterDialog = new RecipeFilterActivity();
+//        RecipeFilterActivity filterDialog = new RecipeFilterActivity();
+//        filterDialog.show(getSupportFragmentManager(), "filter dialog");
+        AllergyFilterDialog filterDialog = new AllergyFilterDialog();
         filterDialog.show(getSupportFragmentManager(), "filter dialog");
 
     }

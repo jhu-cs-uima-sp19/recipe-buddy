@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="allergy_selection">
+        <item>Dairy</item>
+        <item>Nut</item>
         <item>Gluten</item>
-        <item>Wheat</item>
+        <item>Soy</item>
+        <item>Meat</item>
+        <item>Shellfish</item>
     </string-array>
 </resources>

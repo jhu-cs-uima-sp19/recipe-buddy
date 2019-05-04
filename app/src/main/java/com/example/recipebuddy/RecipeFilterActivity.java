@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
@@ -21,29 +22,41 @@ public class RecipeFilterActivity extends AppCompatDialogFragment{
         ArrayList<String> list = new ArrayList<String>();
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final String[] items = getResources().getStringArray(R.array.allergy_selection);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Filter Recipes").setMultiChoiceItems(R.array.allergy_selection, null, new DialogInterface.OnMultiChoiceClickListener() {
+            AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+            builderSingle.setTitle("Select One Name:-");
+
+            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
+            arrayAdapter.add("Hardik");
+            arrayAdapter.add("Archit");
+            arrayAdapter.add("Jignesh");
+            arrayAdapter.add("Umang");
+            arrayAdapter.add("Gatti");
+
+            builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                    if(b){
-                        list.add(items[i]);
-                    }
-                    else if(list.contains(items[i])){
-                        list.remove(items[i]);
-                    }
-                }
-            }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    String selections = "";
-                    for(String ms : list){
-                        selections = selections + "\n" + ms;
-                    }
-                    Toast.makeText(getActivity(), "Selected: " + selections, Toast.LENGTH_SHORT).show();
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
             });
-            return builder.create();
+
+            builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String strName = arrayAdapter.getItem(which);
+                    AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+                    builderInner.setMessage(strName);
+                    builderInner.setTitle("Your Selected Item is");
+                    builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog,int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builderInner.show();
+                }
+            });
+            builderSingle.show();
+            return builderSingle.create();
         }
 
 
