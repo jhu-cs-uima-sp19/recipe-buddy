@@ -51,7 +51,7 @@ public class DisplayRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_recipe);
 
-        cancel = (ImageButton) findViewById(R.id.closeRecipe);
+        cancel = findViewById(R.id.closeRecipe);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,11 +73,11 @@ public class DisplayRecipeActivity extends AppCompatActivity {
         mSectionsPagerAdapter.addFragment(RecipeDirectionsFragment.newInstance(name), "Directions");
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Set up the TabLayout with the sections adapter.
-        tabLayout = (TabLayout) findViewById(R.id.tabLayoutMain);
+        tabLayout = findViewById(R.id.tabLayoutMain);
         tabLayout.setupWithViewPager(mViewPager);
 
         FloatingActionButton fab = findViewById(R.id.fab);

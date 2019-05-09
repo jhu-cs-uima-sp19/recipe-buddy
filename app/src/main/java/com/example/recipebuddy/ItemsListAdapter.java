@@ -1,6 +1,9 @@
 package com.example.recipebuddy;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -32,15 +35,11 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
     Context mContext;
     CustomItemClickListener listener;
     HashMap<String, Boolean> selected = new HashMap<String, Boolean>();
-
-    public ItemsListAdapter(Context context, ArrayList<ItemsListSingleItem> itemList) {
-        this.data = itemList;
-        this.mContext = context;
-    }
+    SQLiteDatabase ingredDB;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_ingredient, parent, false);
+        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_favoritable_ingredient, parent, false);
         final ViewHolder mViewHolder = new ViewHolder(mView);
         mViewHolder.setIsRecyclable(false);
         mView.setOnClickListener(new View.OnClickListener() {
@@ -54,11 +53,27 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
                     selected.put(value, true);
                     view.findViewById(R.id.view_foreground).setSelected(true);
                 }
-                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
         return mViewHolder;
+    }
+
+    public int getIngredient(String ingred) {
+        String [] selArgs = {ingred};
+
+        Cursor c = ingredDB.query(
+                "ingredients",
+                null,
+                "name=?",
+                selArgs,
+                null,
+                null,
+                null
+        );
+        c.moveToFirst();
+        return c.getInt(c.getColumnIndex("favorited"));
     }
 
     @Override
@@ -68,6 +83,15 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
         String name = data.get(position).getTitle();
         if (selected.get(name) != null && selected.get(name)) {
             holder.viewForeground.setSelected(true);
+        }
+
+        // check if this ingredient has been favorited by the user
+        int favorited = getIngredient(name);
+
+        if (favorited == 0) {
+            holder.toggleButton.setChecked(false);
+        } else {
+            holder.toggleButton.setChecked(true);
         }
     }
 
@@ -87,6 +111,8 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
         this.data = data;
         this.mContext = mContext;
         this.listener = listener;
+        DBHandlerIngredient ingreDBHandler = new DBHandlerIngredient(mContext);
+        this.ingredDB = ingreDBHandler.getReadableDatabase();
     }
 
     public HashMap<String, Boolean> getSelectedItems() {
@@ -96,7 +122,6 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView itemTitle;
         public View view;
-        public TextView name, description, price;
         public ImageView thumbnail;
         public RelativeLayout viewBackground, viewForeground;
         public ToggleButton toggleButton;
@@ -106,9 +131,30 @@ public class ItemsListAdapter extends RecyclerView.Adapter<ItemsListAdapter.View
             view = v;
             viewBackground = v.findViewById(R.id.view_background);
             viewForeground = v.findViewById(R.id.view_foreground);
-            itemTitle = (TextView) v
+            itemTitle = v
                     .findViewById(R.id.name);
-            thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
+            thumbnail = v.findViewById(R.id.thumbnail);
+            toggleButton = v.findViewById(R.id.myToggleButton);
+            toggleButton = v.findViewById(R.id.myToggleButton);
+            toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.ic_baseline_star_border_24px));
+            toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    DBHandlerIngredient dbHelper = new DBHandlerIngredient(view.getContext());
+                    SQLiteDatabase ingreDB = dbHelper.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+
+                    if (isChecked) {
+                        cv.put(DBConstants.KitchenColumns.COLUMN_FAVORITED, 1);
+                        toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_baseline_star_24px));
+                        ingreDB.update("ingredients", cv, "name" + " = ?", new String[]{itemTitle.getText().toString()});
+                    } else {
+                        cv.put(DBConstants.KitchenColumns.COLUMN_FAVORITED, 0);
+                        toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_baseline_star_border_24px));
+                        ingreDB.update("ingredients", cv, "name" + " = ?", new String[]{itemTitle.getText().toString()});
+                    }
+                }
+            });
         }
     }
 }

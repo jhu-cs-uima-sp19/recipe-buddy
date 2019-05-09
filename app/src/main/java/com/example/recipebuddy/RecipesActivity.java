@@ -167,7 +167,7 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
 
         data = createItemsList(items);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerViewRecipes);
+        final RecyclerView recyclerView = findViewById(R.id.recyclerViewRecipes);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

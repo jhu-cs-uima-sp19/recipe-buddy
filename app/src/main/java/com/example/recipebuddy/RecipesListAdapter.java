@@ -70,9 +70,9 @@ public class RecipesListAdapter extends RecyclerView.Adapter<RecipesListAdapter.
 
         ViewHolder(View v) {
             super(v);
-            itemTitle = (TextView) v
+            itemTitle = v
                     .findViewById(R.id.name);
-            thumbnailImage = (ImageView) v.findViewById(R.id.thumbnail);
+            thumbnailImage = v.findViewById(R.id.thumbnail);
         }
     }
 }

@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         MODE = getIntent().getIntExtra("mode", 0);
         String selected = getIntent().getStringExtra("value");
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DBHandlerRecipe recipeDB;
@@ -106,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter.addFragment(new SavedRecipesFragment(), "Saved Recipes");
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // Set up the TabLayout with the sections adapter.
-        tabLayout = (TabLayout) findViewById(R.id.tabLayoutMain);
+        tabLayout = findViewById(R.id.tabLayoutMain);
         tabLayout.setupWithViewPager(mViewPager);
 
         // If in delete mode, change color scheme

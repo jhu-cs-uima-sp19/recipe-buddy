@@ -78,7 +78,7 @@ public class RecipeIngredientsFragment extends Fragment {
         }
 
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewRecipesIngredients);
+        RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewRecipesIngredients);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

@@ -30,9 +30,7 @@ public class AllergyFilterDialog extends AppCompatDialogFragment{
                 if(b){
                     list.add(items[i]);
                 }
-                else if(list.contains(items[i])){
-                    list.remove(items[i]);
-                }
+                else list.remove(items[i]);
             }
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

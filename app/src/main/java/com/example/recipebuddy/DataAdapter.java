@@ -52,7 +52,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
             thumbnail = v.findViewById(R.id.thumbnail);
             viewBackground = v.findViewById(R.id.view_background);
             viewForeground = v.findViewById(R.id.view_foreground);
-            toggleButton = (ToggleButton) v.findViewById(R.id.myToggleButton);
+            toggleButton = v.findViewById(R.id.myToggleButton);
             toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(v.getContext(), R.drawable.ic_baseline_star_border_24px));
             toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -198,23 +198,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     public void setSelection(String sel) {
         selected.put(sel, true);
     }
-
-//    public void setSelected(SQLiteDatabase db) {
-//        Cursor c = db.query(
-//                "ingredients",
-//                null,
-//                null,
-//                null,
-//                null,
-//                null,
-//                null);
-//        c.moveToFirst();
-//        do {
-//            String name = c.getString(c.getColumnIndex("name"));
-//            int favorited =
-//            if
-//        } while (c.moveToNext());
-//    }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override

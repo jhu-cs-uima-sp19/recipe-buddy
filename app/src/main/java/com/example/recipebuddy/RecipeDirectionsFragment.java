@@ -71,7 +71,7 @@ public class RecipeDirectionsFragment extends Fragment {
 
 
         super.onViewCreated(view, savedInstanceState);
-        TextView textView = (TextView) getView().findViewById(R.id.textView);
+        TextView textView = getView().findViewById(R.id.textView);
         textView.setText(directions);
 //        textView.setText("hi");
     }

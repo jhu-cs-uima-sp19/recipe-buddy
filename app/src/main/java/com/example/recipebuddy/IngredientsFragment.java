@@ -117,7 +117,7 @@ public class IngredientsFragment extends Fragment {
         ingreDB = ingredDBHelper.getReadableDatabase();
 
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewIngredients);
+        recyclerView = getView().findViewById(R.id.recyclerViewIngredients);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -136,7 +136,7 @@ public class IngredientsFragment extends Fragment {
         mAdapter.setSelection(selected);
         recyclerView.setAdapter(mAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) getView().findViewById(R.id.main_fab);
+        FloatingActionButton fab = getView().findViewById(R.id.main_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
