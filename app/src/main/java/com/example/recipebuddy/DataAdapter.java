@@ -57,21 +57,18 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
             toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    KitchenDBHandler dbHelper = new KitchenDBHandler(view.getContext());
-                    SQLiteDatabase kitchenDB = dbHelper.getWritableDatabase();
+                    DBHandlerIngredient dbHelper = new DBHandlerIngredient(view.getContext());
+                    SQLiteDatabase ingreDB = dbHelper.getWritableDatabase();
                     ContentValues cv = new ContentValues();
 
                     if (isChecked) {
                         cv.put(KitchenColumns.COLUMN_FAVORITED, 1);
                         toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_baseline_star_24px));
-                        int numUpdated = kitchenDB.update(KitchenColumns.TABLE_NAME, cv, KitchenColumns.COLUMN_NAME + " = ?", new String[]{name.getText().toString()});
-//                        kitchenDB.query(KitchenColumns.TABLE_NAME, new String[]{KitchenColumns.COLUMN_FAVORITED}, KitchenColumns.COLUMN_NAME + " = ?", new String[]{name.getText().toString()})
-//                        Snackbar.make(view, String.valueOf(numUpdated), Snackbar.LENGTH_LONG).show();
+                        ingreDB.update("ingredients", cv, "name" + " = ?", new String[]{name.getText().toString()});
                     } else {
                         cv.put(KitchenColumns.COLUMN_FAVORITED, 0);
                         toggleButton.setBackgroundDrawable(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_baseline_star_border_24px));
-                        int numUpdated = kitchenDB.update(KitchenColumns.TABLE_NAME, cv, KitchenColumns.COLUMN_NAME + " = ?", new String[]{name.getText().toString()});
-//                        Snackbar.make(view, String.valueOf(numUpdated), Snackbar.LENGTH_LONG).show();
+                        ingreDB.update("ingredients", cv, "name" + " = ?", new String[]{name.getText().toString()});
                     }
                 }
             });
@@ -95,6 +92,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     public DataAdapter(SQLiteDatabase kitchenDB, SQLiteDatabase ingredDB, int mode) {
         this.kitchenDB = kitchenDB;
         this.ingredDB = ingredDB;
+//        setSelected(ingredDB);
         type = "Ingredients";
         MODE = mode;
     }
@@ -111,15 +109,21 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         );
     }
 
-//    public Cursor getIngredient() {
-//        String [] columns = {"name"};
-//
-//        return ingredDB.query("ingredients",
-//                null,
-//                "name",
-//
-//                )
-//    }
+    public int getIngredient(String ingred) {
+        String [] selArgs = {ingred};
+
+        Cursor c = ingredDB.query(
+                "ingredients",
+                null,
+                "name=?",
+                selArgs,
+                null,
+                null,
+                null
+                );
+        c.moveToFirst();
+        return c.getInt(c.getColumnIndex("favorited"));
+    }
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public DataAdapter(Cursor cursor, String type) {
@@ -195,6 +199,23 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         selected.put(sel, true);
     }
 
+//    public void setSelected(SQLiteDatabase db) {
+//        Cursor c = db.query(
+//                "ingredients",
+//                null,
+//                null,
+//                null,
+//                null,
+//                null,
+//                null);
+//        c.moveToFirst();
+//        do {
+//            String name = c.getString(c.getColumnIndex("name"));
+//            int favorited =
+//            if
+//        } while (c.moveToNext());
+//    }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
@@ -213,7 +234,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
         }
 
         // check if this ingredient has been favorited by the user
-        int favorited = mCursor.getInt(mCursor.getColumnIndex(KitchenColumns.COLUMN_FAVORITED));
+        int favorited = getIngredient(name);
 
         if (favorited == 0) {
             holder.toggleButton.setChecked(false);

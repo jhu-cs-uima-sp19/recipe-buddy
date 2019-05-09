@@ -3,7 +3,7 @@
     package="com.example.recipebuddy">
     <uses-permission android:name="android.permission.VIBRATE"/>
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_chef_launcher_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"

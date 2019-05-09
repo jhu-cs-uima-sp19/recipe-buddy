@@ -102,7 +102,12 @@ public class AddIngredientsActivity extends AppCompatActivity {
             do {
                 String ingredient = cursor.getString(cursor.getColumnIndex("name"));
                 if (!alreadyInKitchen.contains(ingredient)) {
-                    ingredients.add(ingredient);
+                    if (cursor.getInt(cursor.getColumnIndex("favorited")) == 1) {
+                        ingredients.add(0, ingredient);
+                    } else {
+                        ingredients.add(ingredient);
+                    }
+
                 }
             } while(cursor.moveToNext());
         }

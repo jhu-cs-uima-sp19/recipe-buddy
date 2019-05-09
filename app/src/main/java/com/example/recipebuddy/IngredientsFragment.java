@@ -37,6 +37,7 @@ public class IngredientsFragment extends Fragment {
     View view;
     RecyclerView recyclerView;
     SQLiteDatabase kitchenDB;
+    SQLiteDatabase ingreDB;
     DataAdapter mAdapter;
     ToggleButton toggleButton;
     int MODE;
@@ -112,6 +113,9 @@ public class IngredientsFragment extends Fragment {
         KitchenDBHandler dbHelper = new KitchenDBHandler(getContext());
         kitchenDB = dbHelper.getReadableDatabase();
 
+        DBHandlerIngredient ingredDBHelper = new DBHandlerIngredient(getContext());
+        ingreDB = ingredDBHelper.getReadableDatabase();
+
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerViewIngredients);
 
@@ -128,7 +132,7 @@ public class IngredientsFragment extends Fragment {
         MODE = getArguments().getInt("mode", 0);
         String selected = getArguments().getString("value", "");
         // specify an adapter (see also next example)
-        mAdapter = new DataAdapter(kitchenDB, MODE);
+        mAdapter = new DataAdapter(kitchenDB, ingreDB, MODE);
         mAdapter.setSelection(selected);
         recyclerView.setAdapter(mAdapter);
 
