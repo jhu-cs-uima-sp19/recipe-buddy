@@ -10,28 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" >
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="23dp"
-                android:layout_height="27dp"
-                android:layout_gravity="end"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@color/colorPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_baseline_close_24px" />
+            </android.support.v7.widget.Toolbar>
 
-        </android.support.v7.widget.Toolbar>
-
+            <com.miguelcatalan.materialsearchview.MaterialSearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:searchBackground="@color/colorPrimary"
+                app:searchCloseIcon="@drawable/ic_baseline_close_24px"
+                app:searchBackIcon="@drawable/ic_baseline_arrow_back_24px"
+                android:textColor="#FFFFFF"
+                >
+            </com.miguelcatalan.materialsearchview.MaterialSearchView>
+        </RelativeLayout>
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_add_ingredients" />
