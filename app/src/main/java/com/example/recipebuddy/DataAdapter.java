@@ -92,7 +92,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
     public DataAdapter(SQLiteDatabase kitchenDB, SQLiteDatabase ingredDB, int mode) {
         this.kitchenDB = kitchenDB;
         this.ingredDB = ingredDB;
-//        setSelected(ingredDB);
         type = "Ingredients";
         MODE = mode;
     }
@@ -171,7 +170,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.MyViewHolder> 
                 }
             });
         } else if (MODE == 1) {
-            v.findViewById(R.id.myToggleButton).setVisibility(View.GONE);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
