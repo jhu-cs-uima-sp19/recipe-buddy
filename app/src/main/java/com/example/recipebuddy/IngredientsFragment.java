@@ -39,7 +39,6 @@ public class IngredientsFragment extends Fragment {
     SQLiteDatabase kitchenDB;
     SQLiteDatabase ingreDB;
     DataAdapter mAdapter;
-    ToggleButton toggleButton;
     int MODE;
 
     @Nullable

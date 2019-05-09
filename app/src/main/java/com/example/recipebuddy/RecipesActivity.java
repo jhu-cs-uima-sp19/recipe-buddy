@@ -124,20 +124,6 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
                     }
                 }
 
-                System.out.println(match + "qwerqrr");
-//                String recipe_ingredient = cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase();
-
-                //Main ingredient match
-//                Boolean has_ingredients = false;
-//                for (String item : kitchenItems) {
-//
-//
-//                    if (recipe_ingredient.contains(item.toLowerCase())) {
-//
-//                        has_ingredients = true;
-//                        break;
-//                    }
-//                }
                 if(has_ingredients){
                     String recipe_allergy = cursor.getString(cursor.getColumnIndex("allergies")).trim().toLowerCase();
 
@@ -187,7 +173,7 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
                 intent.putExtra("name", data.get(position).getTitle());
                 startActivity(intent);
             }
-        });
+        }, new DBHandlerRecipe(this).getReadableDatabase());
         recyclerView.setAdapter(adapter);
     }
 
@@ -205,8 +191,6 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
     }
 
     public void openFilterDialog() {
-//        RecipeFilterActivity filterDialog = new RecipeFilterActivity();
-//        filterDialog.show(getSupportFragmentManager(), "filter dialog");
         AllergyFilterDialog filterDialog = new AllergyFilterDialog();
         filterDialog.show(getSupportFragmentManager(), "filter dialog");
 
