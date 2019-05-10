@@ -113,36 +113,17 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
 
         if (cursor.moveToFirst()) {
             do {
-                //threshold = 0.5;
-                Boolean has_ingredients = false;
-                Boolean has_main = false;
-                double match = 0.0;
-                String[] ingredients = cursor.getString(cursor.getColumnIndex("ingredients")).toLowerCase().split(",");
-                int total_ing = ingredients.length;
-                String recipe_ingredient = cursor.getString(cursor.getColumnIndex("main_ingredient")).toLowerCase();
-                for (String item : kitchenItems) {
-                    if (recipe_ingredient.contains(item.toLowerCase())) {
-                        match += (1.0/total_ing)*3;
-                        has_main = true;
+                Boolean has_required_ingredients = true;
+                String[] requiredIngredients = cursor.getString(cursor.getColumnIndex("main_ingredient")).split(",");
+
+                for (String item : requiredIngredients) {
+                    if (!kitchenItems.contains(item)) {
+                        has_required_ingredients = false;
                         break;
                     }
                 }
-                if(has_main){
-                    for(String ing : ingredients){
-                        if(!ing.toLowerCase().equals(recipe_ingredient)) {
-                            String toCompare = ing.substring(0, 1).toUpperCase() + ing.substring(1);
-                            if (kitchenItems.contains(toCompare)) {
-                                match += 1.0 / total_ing;
-                            }
-                        }
-                    }
-                    if(match >= threshold){
 
-                        has_ingredients = true;
-                    }
-                }
-
-                if(has_ingredients){
+                if(has_required_ingredients){
                     String recipe_allergy = cursor.getString(cursor.getColumnIndex("allergies")).trim().toLowerCase();
 
                     Boolean check_allergy = false;
