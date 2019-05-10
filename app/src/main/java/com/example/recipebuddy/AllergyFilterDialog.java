@@ -3,6 +3,7 @@ package com.example.recipebuddy;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -20,27 +21,55 @@ public class AllergyFilterDialog extends AppCompatDialogFragment{
 
     ArrayList<String> list = new ArrayList<String>();
     private AllergyDialogListener listener;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final String[] items = getResources().getStringArray(R.array.allergy_selection);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Filter Recipes").setMultiChoiceItems(R.array.allergy_selection, null, new DialogInterface.OnMultiChoiceClickListener() {
+        boolean[] selectedArray = getArguments().getBooleanArray("selected");
+        System.out.println(selectedArray.length);
+        if (selectedArray.length < items.length) {
+            selectedArray = null;
+        } else {
+            for (int i = 0; i < selectedArray.length; i++) {
+                if (selectedArray[i]) {
+                    list.add(items[i]);
+                }
+            }
+        }
+        builder.setTitle("Filter Recipes").setMultiChoiceItems(R.array.allergy_selection, selectedArray, new DialogInterface.OnMultiChoiceClickListener() {
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
             @Override
             public void onClick(DialogInterface dialogInterface, int i, boolean b) {
                 if(b){
                     list.add(items[i]);
+                    editor.putInt(Integer.toString(i), 1);
+                    editor.commit();
                 }
-                else list.remove(items[i]);
+                else {
+                    list.remove(items[i]);
+                    editor.putInt(Integer.toString(i), 0);
+                    editor.commit();
+                }
             }
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+
                 String selections = "";
+
                 for(String ms : list){
                     selections = selections + "\n" + ms;
                 }
                 Toast.makeText(getActivity(), "Selected: " + selections, Toast.LENGTH_SHORT).show();
                 listener.submitted(list);
+
+                editor.putInt("size", items.length);
+                editor.commit();
             }
         });
         return builder.create();

@@ -1,6 +1,8 @@
 package com.example.recipebuddy;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
@@ -198,9 +200,21 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
     }
 
     public void openFilterDialog() {
-        AllergyFilterDialog filterDialog = new AllergyFilterDialog();
-        filterDialog.show(getSupportFragmentManager(), "filter dialog");
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
+        int i = sharedPref.getInt("size", 0);
+        boolean[] selectedArray = new boolean[i];
+        for (int j = 0; j < i; j++) {
+            int selected = sharedPref.getInt(Integer.toString(j), 0);
+            selectedArray[j] = selected == 1;
+        }
+
+        AllergyFilterDialog filterDialog = new AllergyFilterDialog();
+        Bundle b = new Bundle();
+        b.putBooleanArray("selected", selectedArray);
+        filterDialog.setArguments(b);
+        filterDialog.show(getSupportFragmentManager(), "filter dialog");
     }
     @Override
     public void submitted(ArrayList<String> input){
