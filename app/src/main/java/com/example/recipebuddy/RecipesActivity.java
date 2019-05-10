@@ -28,6 +28,7 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
     private ArrayList<ItemsListSingleItem> data;
     private ArrayList<String> allergies;
     private double threshold = 0.5;
+    private RecipesListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +167,7 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
         recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
 
         // specify an adapter (see also next example)
-        RecipesListAdapter adapter = new RecipesListAdapter(this, data, new CustomItemClickListener() {
+        adapter = new RecipesListAdapter(this, data, new CustomItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Intent intent = new Intent(v.getContext(), DisplayRecipeActivity.class);
@@ -175,6 +176,12 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
             }
         }, new DBHandlerRecipe(this).getReadableDatabase());
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 
     public ArrayList<ItemsListSingleItem> createItemsList(ArrayList<String> list) {

@@ -1,6 +1,10 @@
 package com.example.recipebuddy;
 
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,10 +17,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,24 +50,126 @@ public class DisplayRecipeActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private String name;
 
-    private static ImageButton cancel;
+    private static ImageButton toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_recipe);
 
-        cancel = findViewById(R.id.closeRecipe);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
         Intent launcher = getIntent();
         name = launcher.getStringExtra("name");
         this.setTitle(name);
+
+        DBHandlerRecipe recipeDBHandler = new DBHandlerRecipe(getApplicationContext());
+        SQLiteDatabase recipeDB = recipeDBHandler.getWritableDatabase();
+
+        String[] args = {name};
+
+        Cursor c = recipeDB.query(
+                "recipes",
+                null,
+                "name=?",
+                args,
+                null,
+                null,
+                null);
+
+        c.moveToFirst();
+        int favorited = c.getInt(c.getColumnIndex("favorited"));
+
+        toggle = findViewById(R.id.toggleSavedRecipes);
+
+        if (favorited == 1) {
+            //recipe is favorited
+            toggle.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_remove_24px));
+            toggle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final View view = v;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setTitle("Remove from Saved Recipes");
+                    builder.setMessage("Do you want to remove this recipe from your saved recipes?");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DBHandlerRecipe recipeDBHandler = new DBHandlerRecipe(view.getContext());
+                            SQLiteDatabase recipeDB = recipeDBHandler.getWritableDatabase();
+
+                            ContentValues cv = new ContentValues();
+                            cv.put("favorited", 0);
+
+                            String[] args = {name};
+
+                            recipeDB.update(
+                                    "recipes",
+                                    cv,
+                                    "name=?",
+                                    args);
+                            finish();
+                            startActivity(getIntent());
+                            overridePendingTransition(0,0);
+                            Toast.makeText(getApplicationContext(), "Removed from saved recipes", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(getApplicationContext(), "Recipe not removed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    builder.show();
+
+                }
+            });
+        } else {
+            //recipe is not favorited
+            toggle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final View view = v;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setTitle("Add to Saved Recipes");
+                    builder.setMessage("Do you want to save this recipe to your saved recipes?");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DBHandlerRecipe recipeDBHandler = new DBHandlerRecipe(view.getContext());
+                            SQLiteDatabase recipeDB = recipeDBHandler.getWritableDatabase();
+
+                            ContentValues cv = new ContentValues();
+                            cv.put("favorited", 1);
+
+                            String[] args = {name};
+
+                            recipeDB.update(
+                                    "recipes",
+                                    cv,
+                                    "name=?",
+                                    args);
+                            finish();
+                            startActivity(getIntent());
+                            overridePendingTransition(0,0);
+                            Toast.makeText(getApplicationContext(), "Added to saved recipes", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(getApplicationContext(), "Recipe not saved", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    builder.show();
+
+                }
+            });
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
