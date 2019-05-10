@@ -1,8 +1,10 @@
 package com.example.recipebuddy;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -27,7 +29,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayRecipeActivity extends AppCompatActivity {
+public class DisplayRecipeActivity extends AppCompatActivity implements RemoveIngredientsDialog.RemoveIngredientsDialogListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -51,6 +53,7 @@ public class DisplayRecipeActivity extends AppCompatActivity {
     private String name;
 
     private static ImageButton toggle;
+    private SQLiteDatabase recipeDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +65,7 @@ public class DisplayRecipeActivity extends AppCompatActivity {
         this.setTitle(name);
 
         DBHandlerRecipe recipeDBHandler = new DBHandlerRecipe(getApplicationContext());
-        SQLiteDatabase recipeDB = recipeDBHandler.getWritableDatabase();
+        recipeDB = recipeDBHandler.getWritableDatabase();
 
         String[] args = {name};
 
@@ -192,11 +195,51 @@ public class DisplayRecipeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishAffinity();
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                startActivity(intent);
+                openRemoveIngredientsDialog();
             }
         });
+    }
+
+    public void openRemoveIngredientsDialog() {
+        String[] ingredients = {};
+        String[] args = {name};
+        Cursor cursor = recipeDB.query(
+                "recipes",
+                null,
+                "name=?",
+                args,
+                null,
+                null,
+                null);
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String ingredientsStr = cursor.getString(cursor.getColumnIndex("ingredients"));
+            ingredients = ingredientsStr.split(", ");
+        }
+
+        RemoveIngredientsDialog removeIngredientsDialog = new RemoveIngredientsDialog();
+        Bundle b = new Bundle();
+        b.putStringArray("ingredients", ingredients);
+        removeIngredientsDialog.setArguments(b);
+        removeIngredientsDialog.show(getSupportFragmentManager(), "filter dialog");
+    }
+
+    @Override
+    public void submitted(ArrayList<String> data) {
+        KitchenDBHandler kitchenDBHandler = new KitchenDBHandler(getApplicationContext());
+        SQLiteDatabase kitchenDB = kitchenDBHandler.getWritableDatabase();
+
+        for (int i = 0; i < data.size(); i++) {
+            kitchenDB.delete(
+                    DBConstants.KitchenColumns.TABLE_NAME,
+                    DBConstants.KitchenColumns.COLUMN_NAME + "=?",
+                    new String[] {data.get(i)});
+        }
+
+        finishAffinity();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
     }
 
     /**
