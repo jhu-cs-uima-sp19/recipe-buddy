@@ -36,8 +36,23 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         queryData();
+        // clear shared preferences for filters
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        int i = sharedPref.getInt("size", 0);
+        for (int j = 0; j < i; j++) {
+            editor.remove(Integer.toString(j));
+        }
+        editor.remove("size");
+        editor.commit();
     }
+
     protected void queryData(){
+        query(true);
+    }
+
+    protected void query(boolean finish){
         setContentView(R.layout.activity_recipes);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -149,9 +164,11 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
 
         }
 
-        if (items.isEmpty()) {
+        if (items.isEmpty() && finish) {
             Toast.makeText(getApplicationContext(),"No recipes with selected ingredients",Toast.LENGTH_SHORT).show();
             finish();
+        } else if (items.isEmpty()) {
+            Toast.makeText(getApplicationContext(),"No recipes with selected ingredients",Toast.LENGTH_SHORT).show();
         }
 
         data = createItemsList(items);
@@ -220,7 +237,7 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
     public void submitted(ArrayList<String> input){
         allergies = input;
         System.out.println(allergies);
-        queryData();
+        query(false);
     }
 }
 
