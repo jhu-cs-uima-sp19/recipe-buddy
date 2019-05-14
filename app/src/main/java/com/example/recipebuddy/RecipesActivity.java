@@ -114,7 +114,7 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
         if (cursor.moveToFirst()) {
             do {
                 Boolean has_required_ingredients = true;
-                String[] requiredIngredients = cursor.getString(cursor.getColumnIndex("main_ingredient")).split(",");
+                String[] requiredIngredients = cursor.getString(cursor.getColumnIndex("main_ingredient")).split(", ");
 
                 for (String item : requiredIngredients) {
                     if (!kitchenItems.contains(item)) {
