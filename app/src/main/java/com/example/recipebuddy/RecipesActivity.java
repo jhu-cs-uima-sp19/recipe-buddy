@@ -213,6 +213,7 @@ public class RecipesActivity extends AppCompatActivity implements AllergyFilterD
         b.putBooleanArray("selected", selectedArray);
         filterDialog.setArguments(b);
         filterDialog.show(getSupportFragmentManager(), "filter dialog");
+        //
     }
     @Override
     public void submitted(ArrayList<String> input){
